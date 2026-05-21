@@ -30,8 +30,6 @@ body{
   min-height:100vh;
   overflow-x:hidden;
 }
-
-/* ── Background grid ── */
 body::before{
   content:'';
   position:fixed;
@@ -43,8 +41,6 @@ body::before{
   pointer-events:none;
   z-index:0;
 }
-
-/* ── Header ── */
 header{
   background: linear-gradient(180deg, #0d1426 0%, rgba(10,14,26,0) 100%);
   border-bottom:1px solid var(--border);
@@ -80,11 +76,7 @@ header{
   padding:6px 14px;border-radius:40px;font-size:12px;color:var(--muted);
   display:flex;align-items:center;gap:6px;
 }
-
-/* ── Layout ── */
 .wrap{max-width:1280px;margin:0 auto;padding:32px 24px 80px;position:relative;z-index:1;}
-
-/* ── Dashboard ── */
 #dashboard-hero{text-align:center;padding:56px 0 40px;}
 #dashboard-hero .eyebrow{
   display:inline-flex;align-items:center;gap:8px;
@@ -98,8 +90,6 @@ header{
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
 }
 #dashboard-hero p{color:var(--muted);font-size:1.05rem;max-width:520px;margin:0 auto;}
-
-/* ── Card Grid ── */
 .card-grid{
   display:grid;
   grid-template-columns:repeat(auto-fill, minmax(200px,1fr));
@@ -132,7 +122,6 @@ header{
 }
 .nav-card h3{font-size:15px;font-weight:700;margin-bottom:4px;}
 .nav-card p{font-size:12px;color:var(--muted);}
-
 .ic-aim{background:rgba(56,189,248,.12);color:var(--accent);}
 .ic-theory{background:rgba(129,140,248,.12);color:var(--accent2);}
 .ic-pre{background:rgba(251,146,60,.12);color:var(--warn);}
@@ -141,12 +130,9 @@ header{
 .ic-ref{background:rgba(129,140,248,.12);color:var(--accent2);}
 .ic-cont{background:rgba(52,211,153,.12);color:var(--accent3);}
 .ic-feed{background:rgba(251,146,60,.12);color:var(--warn);}
-
-/* ── Pages ── */
 .page{display:none;animation:fadeUp .35s ease both;}
 .page.active{display:block;}
 @keyframes fadeUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
-
 .back-btn{
   display:inline-flex;align-items:center;gap:8px;
   background:var(--surface2);border:1px solid var(--border);
@@ -155,15 +141,12 @@ header{
   transition:transform .2s,background .2s;margin-bottom:28px;
 }
 .back-btn:hover{background:var(--surface);transform:translateX(-4px);}
-
 .page-hdr{display:flex;align-items:center;gap:16px;margin-bottom:28px;padding-bottom:20px;border-bottom:1px solid var(--border);}
 .page-hdr .ph-icon{
   width:52px;height:52px;border-radius:14px;display:grid;place-items:center;font-size:24px;flex-shrink:0;
 }
 .page-hdr h2{font-size:1.7rem;font-weight:800;letter-spacing:-.02em;}
 .page-hdr p{font-size:13px;color:var(--muted);margin-top:2px;}
-
-/* ── Content Box ── */
 .content-box{
   background:var(--surface);border:1px solid var(--border);
   border-radius:20px;padding:28px 32px;
@@ -178,8 +161,6 @@ header{
   font-family:'Space Mono',monospace;font-size:.95rem;
   color:var(--accent3);margin:14px 0;line-height:2;
 }
-
-/* ── MCQ ── */
 .mcq-set{display:flex;flex-direction:column;gap:14px;}
 .mcq-q{
   background:var(--surface);border:1px solid var(--border);
@@ -204,8 +185,6 @@ header{
 .opt label{cursor:pointer;font-size:14px;color:var(--text);}
 .opt.correct-ans{background:rgba(52,211,153,.08);border-color:rgba(52,211,153,.3);}
 .opt.wrong-ans{background:rgba(239,68,68,.08);border-color:rgba(239,68,68,.3);}
-
-/* ── Buttons ── */
 .btn{
   display:inline-flex;align-items:center;gap:8px;
   padding:12px 26px;border-radius:40px;font-weight:700;
@@ -226,8 +205,8 @@ header{
   box-shadow:0 4px 20px rgba(52,211,153,.3);
 }
 .btn-success:hover{transform:translateY(-2px);}
-
-/* ── Simulator ── */
+ 
+/* ── SIMULATOR ── */
 .sim-panel{display:flex;flex-direction:column;gap:20px;}
 .func-card{
   background:var(--surface2);border:1px solid var(--border);
@@ -239,7 +218,6 @@ header{
   color:var(--accent3);font-weight:700;
 }
 .func-display .var{color:var(--accent);}
-
 .inputs-row{display:flex;gap:16px;flex-wrap:wrap;}
 .inp-group{flex:1;min-width:140px;}
 .inp-group label{display:block;font-size:12px;font-weight:600;color:var(--muted);margin-bottom:8px;text-transform:uppercase;letter-spacing:.06em;}
@@ -250,7 +228,6 @@ header{
   font-family:'Space Mono',monospace;transition:.2s;
 }
 .inp-group input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(56,189,248,.15);}
-
 .sim-btns{display:flex;gap:12px;flex-wrap:wrap;}
 .sim-btn{
   flex:1;min-width:200px;
@@ -262,7 +239,8 @@ header{
 .sim-btn-x:hover{background:rgba(56,189,248,.2);transform:translateY(-2px);}
 .sim-btn-y{background:linear-gradient(135deg,rgba(129,140,248,.15),rgba(129,140,248,.05));border:1px solid rgba(129,140,248,.3);color:var(--accent2);}
 .sim-btn-y:hover{background:rgba(129,140,248,.2);transform:translateY(-2px);}
-
+ 
+/* ── Enhanced dual result display ── */
 .result-card{
   background:var(--surface2);border:1px solid var(--border);
   border-radius:16px;padding:24px;
@@ -270,14 +248,42 @@ header{
 }
 .result-card.result-x{border-color:rgba(56,189,248,.4);}
 .result-card.result-y{border-color:rgba(129,140,248,.4);}
-.result-card .r-label{font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:10px;}
-.result-value{
-  font-family:'Space Mono',monospace;font-size:1.6rem;font-weight:700;
+.result-card .r-label{font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:16px;display:flex;align-items:center;gap:8px;}
+ 
+/* Dual panel: symbolic + numerical side by side */
+.dual-result{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;}
+@media(max-width:640px){.dual-result{grid-template-columns:1fr;}}
+.result-panel{
+  background:var(--bg);border:1px solid var(--border);
+  border-radius:12px;padding:16px 18px;
+  position:relative;overflow:hidden;
+}
+.result-panel::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+}
+.result-panel.sym-panel::before{background:linear-gradient(90deg,var(--accent2),transparent);}
+.result-panel.num-panel::before{background:linear-gradient(90deg,var(--accent3),transparent);}
+.result-panel .rp-tag{
+  font-size:10px;text-transform:uppercase;letter-spacing:.12em;
+  color:var(--muted);margin-bottom:10px;display:flex;align-items:center;gap:6px;
+}
+.result-panel .rp-tag .dot{
+  width:7px;height:7px;border-radius:50%;display:inline-block;
+}
+.sym-panel .dot{background:var(--accent2);}
+.num-panel .dot{background:var(--accent3);}
+.sym-value{
+  font-family:'Space Mono',monospace;font-size:1.05rem;font-weight:700;
+  color:var(--accent2);word-break:break-all;line-height:1.5;
+}
+.num-value{
+  font-family:'Space Mono',monospace;font-size:1.8rem;font-weight:700;
   color:var(--accent3);
 }
-.result-formula{font-family:'Space Mono',monospace;font-size:13px;color:var(--muted);margin-top:8px;}
+.num-sub{font-size:11px;color:var(--muted);margin-top:4px;}
+.result-formula{font-family:'Space Mono',monospace;font-size:12px;color:var(--muted);margin-bottom:16px;padding:8px 12px;background:rgba(255,255,255,.03);border-radius:8px;}
 .result-steps{
-  margin-top:16px;padding-top:16px;border-top:1px solid var(--border);
+  margin-top:4px;padding-top:16px;border-top:1px solid var(--border);
   font-size:13px;color:var(--muted);line-height:1.9;
 }
 .result-steps strong{color:var(--text);}
@@ -286,137 +292,70 @@ header{
   border:1px solid rgba(56,189,248,.2);color:var(--accent);
   border-radius:6px;padding:1px 8px;font-family:'Space Mono',monospace;font-size:12px;margin-right:6px;
 }
-
-/* ── Score display ── */
+.sym-badge{
+  display:inline-block;background:rgba(129,140,248,.1);
+  border:1px solid rgba(129,140,248,.2);color:var(--accent2);
+  border-radius:6px;padding:1px 8px;font-family:'Space Mono',monospace;font-size:12px;
+}
+.num-badge{
+  display:inline-block;background:rgba(52,211,153,.1);
+  border:1px solid rgba(52,211,153,.2);color:var(--accent3);
+  border-radius:6px;padding:1px 8px;font-family:'Space Mono',monospace;font-size:12px;
+}
+.idle-state{
+  text-align:center;padding:32px;color:var(--muted);font-size:14px;
+}
+.idle-state i{font-size:28px;margin-bottom:12px;display:block;opacity:.4;}
+ 
+/* score, mcq, posttest etc */
 .score-banner{
   display:none;background:var(--surface2);
   border:1px solid var(--border);border-radius:16px;
   padding:20px 24px;margin-top:16px;
-  display:none;align-items:center;gap:20px;flex-wrap:wrap;
+  align-items:center;gap:20px;flex-wrap:wrap;
 }
 .score-banner.visible{display:flex;}
 .score-num{font-family:'Space Mono',monospace;font-size:2.4rem;font-weight:700;color:var(--accent3);}
 .score-info .title{font-weight:700;font-size:15px;}
 .score-info .sub{font-size:13px;color:var(--muted);}
-.progress-bar{
-  flex:1;min-width:140px;
-  background:rgba(255,255,255,.06);border-radius:40px;height:8px;
-  overflow:hidden;
-}
-.progress-fill{
-  height:100%;border-radius:40px;
-  background:linear-gradient(90deg,var(--accent),var(--accent2));
-  transition:width 1s ease;
-}
-
-/* ── Student input ── */
-.student-row{
-  background:var(--surface);border:1px solid var(--border);
-  border-radius:14px;padding:18px;margin:16px 0;
-}
+.progress-bar{flex:1;min-width:140px;background:rgba(255,255,255,.06);border-radius:40px;height:8px;overflow:hidden;}
+.progress-fill{height:100%;border-radius:40px;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width 1s ease;}
+.student-row{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;margin:16px 0;}
 .student-row label{display:block;font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;}
-.student-row input{
-  width:100%;padding:11px 16px;
-  background:var(--surface2);border:1px solid var(--border);
-  border-radius:12px;color:var(--text);font-size:14px;transition:.2s;
-}
+.student-row input{width:100%;padding:11px 16px;background:var(--surface2);border:1px solid var(--border);border-radius:12px;color:var(--text);font-size:14px;transition:.2s;}
 .student-row input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(56,189,248,.15);}
-
-/* ── Save message ── */
-.save-msg{
-  display:none;padding:12px 20px;border-radius:12px;
-  font-size:14px;font-weight:600;margin-top:14px;
-}
+.save-msg{display:none;padding:12px 20px;border-radius:12px;font-size:14px;font-weight:600;margin-top:14px;}
 .save-msg.ok{display:block;background:rgba(52,211,153,.1);border:1px solid rgba(52,211,153,.3);color:var(--accent3);}
 .save-msg.err{display:block;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);color:#f87171;}
-
-/* ── References ── */
 .ref-list{display:flex;flex-direction:column;gap:12px;margin-top:4px;}
-.ref-item{
-  display:flex;align-items:center;gap:14px;
-  background:var(--surface2);border:1px solid var(--border);
-  border-radius:14px;padding:14px 18px;
-}
-.ref-item .ref-icon{
-  width:36px;height:36px;border-radius:10px;
-  background:rgba(56,189,248,.1);color:var(--accent);
-  display:grid;place-items:center;font-size:16px;flex-shrink:0;
-}
+.ref-item{display:flex;align-items:center;gap:14px;background:var(--surface2);border:1px solid var(--border);border-radius:14px;padding:14px 18px;}
+.ref-item .ref-icon{width:36px;height:36px;border-radius:10px;background:rgba(56,189,248,.1);color:var(--accent);display:grid;place-items:center;font-size:16px;flex-shrink:0;}
 .ref-item .ref-title{font-weight:600;font-size:14px;}
 .ref-item .ref-sub{font-size:12px;color:var(--muted);}
-
-/* ── Contributors ── */
-.contrib-grid{
-  display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px;
-}
-.contrib-card{
-  background:var(--surface);border:1px solid var(--border);
-  border-radius:20px;padding:24px;text-align:center;
-  transition:border-color .2s,transform .2s;
-}
+.contrib-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px;}
+.contrib-card{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:24px;text-align:center;transition:border-color .2s,transform .2s;}
 .contrib-card:hover{border-color:rgba(56,189,248,.3);transform:translateY(-4px);}
-.contrib-avatar{
-  width:60px;height:60px;border-radius:50%;margin:0 auto 14px;
-  display:grid;place-items:center;font-size:24px;
-}
+.contrib-avatar{width:60px;height:60px;border-radius:50%;margin:0 auto 14px;display:grid;place-items:center;font-size:24px;}
 .contrib-card h4{font-weight:700;font-size:15px;margin-bottom:4px;}
 .contrib-card p{font-size:12px;color:var(--muted);}
 .contrib-card .roll{font-family:'Space Mono',monospace;font-size:11px;color:var(--accent);margin-top:4px;}
-
-/* ── Feedback ── */
 .star-row{display:flex;gap:8px;margin:12px 0;}
-.star-btn{
-  font-size:28px;cursor:pointer;
-  color:var(--muted);transition:transform .15s,color .15s;
-  background:none;border:none;padding:4px;
-}
+.star-btn{font-size:28px;cursor:pointer;color:var(--muted);transition:transform .15s,color .15s;background:none;border:none;padding:4px;}
 .star-btn:hover,.star-btn.lit{color:#fbbf24;transform:scale(1.2);}
-.feed-area{
-  width:100%;padding:14px 16px;
-  background:var(--surface2);border:1px solid var(--border);
-  border-radius:14px;color:var(--text);font-size:14px;
-  resize:vertical;min-height:100px;font-family:'Sora',sans-serif;transition:.2s;
-  margin:12px 0 16px;
-}
+.feed-area{width:100%;padding:14px 16px;background:var(--surface2);border:1px solid var(--border);border-radius:14px;color:var(--text);font-size:14px;resize:vertical;min-height:100px;font-family:'Sora',sans-serif;transition:.2s;margin:12px 0 16px;}
 .feed-area:focus{outline:none;border-color:var(--accent);}
-
-/* ── Results Table ── */
 .results-table-wrap{margin-top:20px;overflow-x:auto;}
 .results-table{width:100%;border-collapse:collapse;font-size:13px;}
-.results-table th{
-  background:var(--surface2);padding:10px 14px;text-align:left;
-  font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);
-  border-bottom:1px solid var(--border);
-}
+.results-table th{background:var(--surface2);padding:10px 14px;text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);border-bottom:1px solid var(--border);}
 .results-table td{padding:10px 14px;border-bottom:1px solid rgba(255,255,255,.04);}
 .results-table tr:hover td{background:rgba(56,189,248,.03);}
-.badge-score{
-  background:rgba(52,211,153,.1);color:var(--accent3);
-  border-radius:6px;padding:2px 8px;font-family:'Space Mono',monospace;font-size:12px;
-}
-
-/* ── Toast ── */
-.toast{
-  position:fixed;bottom:28px;right:28px;z-index:999;
-  background:var(--surface2);border:1px solid var(--border);
-  padding:14px 22px;border-radius:14px;font-size:14px;
-  box-shadow:0 12px 40px rgba(0,0,0,.4);
-  transform:translateY(20px);opacity:0;
-  transition:transform .3s,opacity .3s;pointer-events:none;
-  display:flex;align-items:center;gap:10px;
-}
+.badge-score{background:rgba(52,211,153,.1);color:var(--accent3);border-radius:6px;padding:2px 8px;font-family:'Space Mono',monospace;font-size:12px;}
+.toast{position:fixed;bottom:28px;right:28px;z-index:999;background:var(--surface2);border:1px solid var(--border);padding:14px 22px;border-radius:14px;font-size:14px;box-shadow:0 12px 40px rgba(0,0,0,.4);transform:translateY(20px);opacity:0;transition:transform .3s,opacity .3s;pointer-events:none;display:flex;align-items:center;gap:10px;}
 .toast.show{transform:translateY(0);opacity:1;}
 .toast.t-ok .toast-icon{color:var(--accent3);}
 .toast.t-err .toast-icon{color:#f87171;}
-
-footer{
-  text-align:center;padding:28px;
-  border-top:1px solid var(--border);
-  font-size:12px;color:var(--muted);
-  position:relative;z-index:1;
-}
+footer{text-align:center;padding:28px;border-top:1px solid var(--border);font-size:12px;color:var(--muted);position:relative;z-index:1;}
 footer span{color:var(--accent);}
-
 @media(max-width:640px){
   .inputs-row{flex-direction:column;}
   .sim-btns{flex-direction:column;}
@@ -426,7 +365,7 @@ footer span{color:var(--accent);}
 </style>
 </head>
 <body>
-
+ 
 <header>
   <div class="hdr">
     <div class="hdr-left">
@@ -446,10 +385,10 @@ footer span{color:var(--accent);}
     <div class="chip"><i class="fas fa-user-circle"></i> Learner</div>
   </div>
 </header>
-
+ 
 <div class="wrap">
-
-  <!-- ══ DASHBOARD ══ -->
+ 
+  <!-- DASHBOARD -->
   <div id="main-dashboard">
     <div id="dashboard-hero">
       <div class="eyebrow"><i class="fas fa-atom"></i> Engineering Mathematics — Unit III</div>
@@ -491,8 +430,8 @@ footer span{color:var(--accent);}
       </div>
     </div>
   </div>
-
-  <!-- ══ AIM ══ -->
+ 
+  <!-- AIM -->
   <div id="page-aim" class="page">
     <button class="back-btn" onclick="goBack()"><i class="fas fa-arrow-left"></i> Dashboard</button>
     <div class="page-hdr">
@@ -516,8 +455,8 @@ footer span{color:var(--accent);}
       <p>This virtual lab requires only a web browser. No physical setup is needed.</p>
     </div>
   </div>
-
-  <!-- ══ THEORY ══ -->
+ 
+  <!-- THEORY -->
   <div id="page-theory" class="page">
     <button class="back-btn" onclick="goBack()"><i class="fas fa-arrow-left"></i> Dashboard</button>
     <div class="page-hdr">
@@ -527,19 +466,16 @@ footer span{color:var(--accent);}
     <div class="content-box">
       <h4>What is Partial Differentiation?</h4>
       <p>For a function of multiple variables <strong>f(x, y)</strong>, the <em>partial derivative</em> with respect to x is found by treating y as a fixed constant and differentiating normally with respect to x.</p>
-
       <div class="formula-block">
 ∂f/∂x  →  differentiate w.r.t. x, keep y constant<br>
 ∂f/∂y  →  differentiate w.r.t. y, keep x constant
       </div>
-
       <h4>Worked Example</h4>
       <p>Let <strong>f(x, y) = x²y + 2xy²</strong></p>
       <div class="formula-block">
 ∂f/∂x = 2xy + 2y²  &nbsp; (y treated as constant)<br>
 ∂f/∂y = x² + 4xy   &nbsp; (x treated as constant)
       </div>
-
       <h4>Rules Applied</h4>
       <ul>
         <li><strong>Power rule:</strong> ∂(xⁿ)/∂x = nxⁿ⁻¹</li>
@@ -552,8 +488,8 @@ footer span{color:var(--accent);}
       <p>Partial derivatives are written as <code style="background:var(--surface2);padding:2px 8px;border-radius:6px;">∂f/∂x</code> or <code style="background:var(--surface2);padding:2px 8px;border-radius:6px;">fₓ</code>. The symbol ∂ (curly d / del) distinguishes partial from ordinary derivatives.</p>
     </div>
   </div>
-
-  <!-- ══ PRETEST ══ -->
+ 
+  <!-- PRETEST -->
   <div id="page-pretest" class="page">
     <button class="back-btn" onclick="goBack()"><i class="fas fa-arrow-left"></i> Dashboard</button>
     <div class="page-hdr">
@@ -610,16 +546,16 @@ footer span{color:var(--accent);}
       <div class="progress-bar"><div class="progress-fill" id="pretestFill" style="width:0%"></div></div>
     </div>
   </div>
-
-  <!-- ══ SIMULATION ══ -->
+ 
+  <!-- SIMULATION -->
   <div id="page-simulation" class="page">
     <button class="back-btn" onclick="goBack()"><i class="fas fa-arrow-left"></i> Dashboard</button>
     <div class="page-hdr">
       <div class="ph-icon ic-sim"><i class="fas fa-desktop"></i></div>
-      <div><h2>Partial Derivative Simulator</h2><p>Enter any f(x,y) — computes ∂f/∂x and ∂f/∂y numerically</p></div>
+      <div><h2>Partial Derivative Simulator</h2><p>Shows symbolic expression AND numerical value for ∂f/∂x and ∂f/∂y</p></div>
     </div>
     <div class="sim-panel">
-
+ 
       <!-- Function input -->
       <div class="func-card" style="text-align:left;">
         <div class="label" style="margin-bottom:10px;">Enter f(x, y)</div>
@@ -630,8 +566,7 @@ footer span{color:var(--accent);}
             placeholder="e.g. x^2*y + sin(x*y) + exp(x)"
             style="flex:1;min-width:200px;padding:12px 16px;background:var(--surface2);
                    border:1px solid var(--border);border-radius:12px;color:var(--accent3);
-                   font-family:'Space Mono',monospace;font-size:1rem;transition:.2s;"
-            id="funcInput">
+                   font-family:'Space Mono',monospace;font-size:1rem;transition:.2s;">
           <button class="sim-btn sim-btn-x" id="btnLoadFunc" style="flex:0;min-width:auto;padding:12px 20px;white-space:nowrap;">
             <i class="fas fa-check"></i> Load
           </button>
@@ -641,7 +576,7 @@ footer span{color:var(--accent);}
           Supported: <code style="background:var(--surface2);padding:1px 6px;border-radius:4px;">+  -  *  /  ^  sin  cos  tan  log  ln  exp  sqrt  abs  pi  e</code>
         </div>
       </div>
-
+ 
       <!-- Loaded function display -->
       <div class="func-card" id="funcDisplay">
         <div class="label">Loaded Function</div>
@@ -649,7 +584,7 @@ footer span{color:var(--accent);}
           f(<span class="var">x</span>, <span class="var">y</span>) = <span style="color:var(--text)">x^2*y + 2*x*y^2</span>
         </div>
       </div>
-
+ 
       <!-- x, y values -->
       <div class="inputs-row">
         <div class="inp-group">
@@ -661,7 +596,7 @@ footer span{color:var(--accent);}
           <input type="number" id="simY" value="3" step="0.5" placeholder="e.g. 3">
         </div>
       </div>
-
+ 
       <div class="sim-btns">
         <button class="sim-btn sim-btn-x" id="btnPartialX">
           <i class="fas fa-calculator"></i> Compute ∂f/∂x &nbsp;<small>(y constant)</small>
@@ -670,14 +605,33 @@ footer span{color:var(--accent);}
           <i class="fas fa-calculator"></i> Compute ∂f/∂y &nbsp;<small>(x constant)</small>
         </button>
       </div>
-
+ 
+      <!-- Result Card with dual panel -->
       <div class="result-card" id="simResult">
         <div class="r-label"><i class="fas fa-chart-line"></i> &nbsp;Result</div>
-        <div class="result-value" id="resultVal">— Load a function and click Compute —</div>
-        <div class="result-formula" id="resultFormula"></div>
-        <div class="result-steps" id="resultSteps"></div>
+        <div id="resultIdle" class="idle-state">
+          <i class="fas fa-infinity"></i>
+          Load a function and click Compute to see both symbolic and numerical results
+        </div>
+        <div id="resultContent" style="display:none;">
+          <div class="dual-result">
+            <!-- Symbolic panel -->
+            <div class="result-panel sym-panel">
+              <div class="rp-tag"><span class="dot"></span> Symbolic (Algebraic)</div>
+              <div class="sym-value" id="symValue">—</div>
+            </div>
+            <!-- Numerical panel -->
+            <div class="result-panel num-panel">
+              <div class="rp-tag"><span class="dot"></span> Numerical (at x, y)</div>
+              <div class="num-value" id="numValue">—</div>
+              <div class="num-sub" id="numSub"></div>
+            </div>
+          </div>
+          <div class="result-formula" id="resultFormula"></div>
+          <div class="result-steps" id="resultSteps"></div>
+        </div>
       </div>
-
+ 
       <!-- Quick examples -->
       <div style="margin-top:8px;">
         <div style="font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:10px;">Quick Examples</div>
@@ -693,8 +647,8 @@ footer span{color:var(--accent);}
       </div>
     </div>
   </div>
-
-  <!-- ══ POSTTEST ══ -->
+ 
+  <!-- POSTTEST -->
   <div id="page-posttest" class="page">
     <button class="back-btn" onclick="goBack()"><i class="fas fa-arrow-left"></i> Dashboard</button>
     <div class="page-hdr">
@@ -738,16 +692,13 @@ footer span{color:var(--accent);}
         </div>
       </div>
     </div>
-
     <div class="student-row">
       <label><i class="fas fa-user-graduate"></i> &nbsp;Your Name (for saving record)</label>
       <input type="text" id="studentName" placeholder="Enter your full name…">
     </div>
-
     <button class="btn btn-success" id="savePosttestBtn">
       <i class="fas fa-save"></i> Submit &amp; Save Result
     </button>
-
     <div id="posttest-score" class="score-banner">
       <div class="score-num" id="posttestScoreNum">0/5</div>
       <div class="score-info">
@@ -756,10 +707,7 @@ footer span{color:var(--accent);}
       </div>
       <div class="progress-bar"><div class="progress-fill" id="posttestFill" style="width:0%"></div></div>
     </div>
-
     <div id="saveMsg" class="save-msg"></div>
-
-    <!-- Saved records table -->
     <div id="savedSection" style="display:none;margin-top:28px;">
       <div style="font-size:13px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:12px;">
         <i class="fas fa-database"></i> &nbsp;All Saved Records
@@ -767,17 +715,15 @@ footer span{color:var(--accent);}
       <div class="results-table-wrap">
         <table class="results-table" id="recordsTable">
           <thead>
-            <tr>
-              <th>#</th><th>Name</th><th>Score</th><th>Percentage</th><th>Date &amp; Time</th>
-            </tr>
+            <tr><th>#</th><th>Name</th><th>Score</th><th>Percentage</th><th>Date &amp; Time</th></tr>
           </thead>
           <tbody id="recordsBody"></tbody>
         </table>
       </div>
     </div>
   </div>
-
-  <!-- ══ REFERENCES ══ -->
+ 
+  <!-- REFERENCES -->
   <div id="page-references" class="page">
     <button class="back-btn" onclick="goBack()"><i class="fas fa-arrow-left"></i> Dashboard</button>
     <div class="page-hdr">
@@ -785,30 +731,15 @@ footer span{color:var(--accent);}
       <div><h2>References</h2><p>Study resources &amp; further reading</p></div>
     </div>
     <div class="ref-list">
-      <div class="ref-item">
-        <div class="ref-icon"><i class="fas fa-book"></i></div>
-        <div><div class="ref-title">Higher Engineering Mathematics</div><div class="ref-sub">B.S. Grewal — Chapter on Partial Differentiation</div></div>
-      </div>
-      <div class="ref-item">
-        <div class="ref-icon"><i class="fas fa-globe"></i></div>
-        <div><div class="ref-title">NPTEL: Partial Differentiation</div><div class="ref-sub">National Programme on Technology Enhanced Learning — IIT/IISc</div></div>
-      </div>
-      <div class="ref-item">
-        <div class="ref-icon"><i class="fas fa-book"></i></div>
-        <div><div class="ref-title">Advanced Engineering Mathematics</div><div class="ref-sub">Erwin Kreyszig — Chapters on Calculus of Several Variables</div></div>
-      </div>
-      <div class="ref-item">
-        <div class="ref-icon"><i class="fas fa-video"></i></div>
-        <div><div class="ref-title">Khan Academy — Multivariable Calculus</div><div class="ref-sub">Free video lectures on partial derivatives (khanacademy.org)</div></div>
-      </div>
-      <div class="ref-item">
-        <div class="ref-icon"><i class="fas fa-university"></i></div>
-        <div><div class="ref-title">MIT OpenCourseWare — 18.02 Multivariable Calculus</div><div class="ref-sub">Lecture notes and problem sets (ocw.mit.edu)</div></div>
-      </div>
+      <div class="ref-item"><div class="ref-icon"><i class="fas fa-book"></i></div><div><div class="ref-title">Higher Engineering Mathematics</div><div class="ref-sub">B.S. Grewal — Chapter on Partial Differentiation</div></div></div>
+      <div class="ref-item"><div class="ref-icon"><i class="fas fa-globe"></i></div><div><div class="ref-title">NPTEL: Partial Differentiation</div><div class="ref-sub">National Programme on Technology Enhanced Learning — IIT/IISc</div></div></div>
+      <div class="ref-item"><div class="ref-icon"><i class="fas fa-book"></i></div><div><div class="ref-title">Advanced Engineering Mathematics</div><div class="ref-sub">Erwin Kreyszig — Chapters on Calculus of Several Variables</div></div></div>
+      <div class="ref-item"><div class="ref-icon"><i class="fas fa-video"></i></div><div><div class="ref-title">Khan Academy — Multivariable Calculus</div><div class="ref-sub">Free video lectures on partial derivatives (khanacademy.org)</div></div></div>
+      <div class="ref-item"><div class="ref-icon"><i class="fas fa-university"></i></div><div><div class="ref-title">MIT OpenCourseWare — 18.02 Multivariable Calculus</div><div class="ref-sub">Lecture notes and problem sets (ocw.mit.edu)</div></div></div>
     </div>
   </div>
-
-  <!-- ══ CONTRIBUTORS ══ -->
+ 
+  <!-- CONTRIBUTORS -->
   <div id="page-contributors" class="page">
     <button class="back-btn" onclick="goBack()"><i class="fas fa-arrow-left"></i> Dashboard</button>
     <div class="page-hdr">
@@ -816,34 +747,14 @@ footer span{color:var(--accent);}
       <div><h2>Contributors</h2><p>The team behind this virtual lab</p></div>
     </div>
     <div class="contrib-grid">
-      <div class="contrib-card">
-        <div class="contrib-avatar ic-theory"><i class="fas fa-chalkboard-teacher"></i></div>
-        <h4>Mr. Ganesh Tarte</h4>
-        <p>Subject Expert &amp; Mentor</p>
-        <div class="roll">Mathematics Dept.</div>
-      </div>
-      <div class="contrib-card">
-        <div class="contrib-avatar ic-sim"><i class="fas fa-laptop-code"></i></div>
-        <h4>Shantanu Kadam</h4>
-        <p>Frontend &amp; Simulation Lead</p>
-        <div class="roll">125B1E069</div>
-      </div>
-      <div class="contrib-card">
-        <div class="contrib-avatar ic-aim"><i class="fas fa-code"></i></div>
-        <h4>Shikhar Jaiswal</h4>
-        <p>Developer &amp; Integration</p>
-        <div class="roll">125B1E068</div>
-      </div>
-      <div class="contrib-card">
-        <div class="contrib-avatar ic-feed"><i class="fas fa-flask"></i></div>
-        <h4>Virtual Lab Team</h4>
-        <p>PCCoE — LAUC</p>
-        <div class="roll">Applied Sciences</div>
-      </div>
+      <div class="contrib-card"><div class="contrib-avatar ic-theory"><i class="fas fa-chalkboard-teacher"></i></div><h4>Mr. Ganesh Tarte</h4><p>Subject Expert &amp; Mentor</p><div class="roll">Mathematics Dept.</div></div>
+      <div class="contrib-card"><div class="contrib-avatar ic-sim"><i class="fas fa-laptop-code"></i></div><h4>Shantanu Kadam</h4><p>Frontend &amp; Simulation Lead</p><div class="roll">125B1E069</div></div>
+      <div class="contrib-card"><div class="contrib-avatar ic-aim"><i class="fas fa-code"></i></div><h4>Shikhar Jaiswal</h4><p>Developer &amp; Integration</p><div class="roll">125B1E068</div></div>
+      <div class="contrib-card"><div class="contrib-avatar ic-feed"><i class="fas fa-flask"></i></div><h4>Virtual Lab Team</h4><p>PCCoE — LAUC</p><div class="roll">Applied Sciences</div></div>
     </div>
   </div>
-
-  <!-- ══ FEEDBACK ══ -->
+ 
+  <!-- FEEDBACK -->
   <div id="page-feedback" class="page">
     <button class="back-btn" onclick="goBack()"><i class="fas fa-arrow-left"></i> Dashboard</button>
     <div class="page-hdr">
@@ -867,22 +778,21 @@ footer span{color:var(--accent);}
       </button>
     </div>
   </div>
-
-</div><!-- /wrap -->
-
+ 
+</div>
+ 
 <footer>
   <p>© 2025 <span>Virtual Labs</span> · Applied Sciences &amp; Humanities · Pimpri Chinchwad College of Engineering<br>
   <small>Partial Differentiation — Variable as Constant</small></p>
 </footer>
-
-<!-- Toast notification -->
+ 
 <div class="toast" id="toast">
   <i class="fas fa-check-circle toast-icon"></i>
   <span id="toastMsg">Done!</span>
 </div>
-
+ 
 <script>
-// ── Navigation ────────────────────────────────────────────────
+// ── Navigation ──────────────────────────────────────────────
 function goBack(){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.getElementById('main-dashboard').style.display='';
@@ -892,18 +802,15 @@ function openPage(id){
   document.getElementById('main-dashboard').style.display='none';
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   const pg=document.getElementById(id);
-  if(pg){pg.classList.add('active');}
+  if(pg) pg.classList.add('active');
   window.scrollTo({top:0,behavior:'smooth'});
   if(id==='page-posttest') renderRecords();
 }
 document.querySelectorAll('.nav-card').forEach(c=>{
-  c.addEventListener('click',()=>{
-    const t=c.getAttribute('data-target');
-    if(t) openPage(t);
-  });
+  c.addEventListener('click',()=>{ const t=c.getAttribute('data-target'); if(t) openPage(t); });
 });
-
-// ── Toast ─────────────────────────────────────────────────────
+ 
+// ── Toast ────────────────────────────────────────────────────
 function showToast(msg,type='ok'){
   const t=document.getElementById('toast');
   const icon=t.querySelector('.toast-icon');
@@ -913,190 +820,471 @@ function showToast(msg,type='ok'){
   t.classList.add('show');
   setTimeout(()=>t.classList.remove('show'),3000);
 }
-
-// ── Simulator — User-defined function engine ──────────────────
-
-// Safe expression evaluator: converts math expression string → JS function
-// Supports: + - * / ^ sin cos tan log ln exp sqrt abs pi e
-let compiledFn = null;
-let currentFnStr = 'x^2*y + 2*x*y^2';
-
-function compileFunction(expr){
-  // Preprocess: replace ^ with **, add Math. prefixes, handle implicit multiply
-  let e = expr.trim();
-  // implicit multiplication: 2x → 2*x, x( → x*(, )x → )*x
-  e = e.replace(/(\d)([a-zA-Z])/g,'$1*$2');
-  e = e.replace(/([a-zA-Z\d])\(/g,'$1*(');
-  // restore function names that got mangled: sin*(, cos*(, etc.
-  e = e.replace(/\b(sin|cos|tan|exp|sqrt|abs|log|ln)\s*\*/g,'$1');
-  // ^ → **
-  e = e.replace(/\^/g,'**');
-  // ln → Math.log
-  e = e.replace(/\bln\b/g,'Math.log');
-  // log → Math.log (natural; note: users expect ln=log for engineering math)
-  e = e.replace(/\blog\b/g,'Math.log');
-  e = e.replace(/\bsin\b/g,'Math.sin');
-  e = e.replace(/\bcos\b/g,'Math.cos');
-  e = e.replace(/\btan\b/g,'Math.tan');
-  e = e.replace(/\bexp\b/g,'Math.exp');
-  e = e.replace(/\bsqrt\b/g,'Math.sqrt');
-  e = e.replace(/\babs\b/g,'Math.abs');
-  e = e.replace(/\bpi\b/g,'Math.PI');
-  e = e.replace(/\be\b/g,'Math.E');
-  // Build function
-  try {
-    // eslint-disable-next-line no-new-func
-    const fn = new Function('x','y',`"use strict"; return (${e});`);
-    // test it
-    const test = fn(1,1);
-    if(typeof test !== 'number' || !isFinite(test)) throw new Error('Result is not a finite number');
-    return fn;
-  } catch(err){
-    throw new Error('Parse error: ' + err.message);
+ 
+// ══════════════════════════════════════════════════════════════
+// SYMBOLIC DIFFERENTIATION ENGINE
+// Parses the expression into an AST, differentiates symbolically,
+// then pretty-prints the result.
+// ══════════════════════════════════════════════════════════════
+ 
+// ── Tokeniser ──
+function tokenise(expr){
+  const tokens=[];
+  let i=0;
+  while(i<expr.length){
+    const ch=expr[i];
+    if(/\s/.test(ch)){i++;continue;}
+    if(/\d/.test(ch)||ch==='.'){
+      let num='';
+      while(i<expr.length&&(/\d/.test(expr[i])||expr[i]==='.')){num+=expr[i++];}
+      tokens.push({type:'num',val:num});
+    } else if(/[a-zA-Z]/.test(ch)){
+      let word='';
+      while(i<expr.length&&/[a-zA-Z]/.test(expr[i])){word+=expr[i++];}
+      const fns=['sin','cos','tan','exp','sqrt','abs','log','ln'];
+      if(fns.includes(word)) tokens.push({type:'func',val:word});
+      else tokens.push({type:'var',val:word});
+    } else if('+-*/^()'.includes(ch)){
+      tokens.push({type:'op',val:ch});i++;
+    } else {i++;}
   }
+  return tokens;
 }
-
+ 
+// ── Recursive-descent parser → AST ──
+// Grammar:
+//   expr   = term (('+' | '-') term)*
+//   term   = unary (('*' | '/') unary)*
+//   unary  = '-' unary | power
+//   power  = atom ('^' unary)?          (right-assoc)
+//   atom   = num | var | func '(' expr ')' | '(' expr ')'
+ 
+function parse(tokens){
+  let pos=0;
+  function peek(){ return tokens[pos]; }
+  function consume(){ return tokens[pos++]; }
+ 
+  function expr(){
+    let node=term();
+    while(pos<tokens.length && peek().type==='op' && (peek().val==='+'||peek().val==='-')){
+      const op=consume().val;
+      const right=term();
+      node={type:'binop',op,left:node,right};
+    }
+    return node;
+  }
+  function term(){
+    let node=unary();
+    while(pos<tokens.length && peek().type==='op' && (peek().val==='*'||peek().val==='/')){
+      const op=consume().val;
+      const right=unary();
+      node={type:'binop',op,left:node,right};
+    }
+    return node;
+  }
+  function unary(){
+    if(pos<tokens.length && peek().type==='op' && peek().val==='-'){
+      consume();
+      const operand=unary();
+      // Simplify: -(-x) = x, -(num) = -num
+      if(operand.type==='num') return {type:'num',val:String(-Number(operand.val))};
+      return {type:'neg',operand};
+    }
+    return power();
+  }
+  function power(){
+    let node=atom();
+    if(pos<tokens.length && peek().type==='op' && peek().val==='^'){
+      consume();
+      const exp=unary(); // right-associative
+      node={type:'binop',op:'^',left:node,right:exp};
+    }
+    return node;
+  }
+  function atom(){
+    const t=peek();
+    if(!t) throw new Error('Unexpected end of expression');
+    if(t.type==='num'){ consume(); return {type:'num',val:t.val}; }
+    if(t.type==='func'){
+      consume();
+      if(!peek()||peek().val!=='(') throw new Error('Expected ( after '+t.val);
+      consume(); // (
+      const arg=expr();
+      if(!peek()||peek().val!==')') throw new Error('Expected ) after function arg');
+      consume(); // )
+      return {type:'func',name:t.val,arg};
+    }
+    if(t.type==='var'){
+      consume();
+      return {type:'var',name:t.val};
+    }
+    if(t.type==='op' && t.val==='('){
+      consume();
+      const node=expr();
+      if(!peek()||peek().val!==')') throw new Error('Expected )');
+      consume();
+      return node;
+    }
+    throw new Error('Unexpected token: '+t.val);
+  }
+  const tree=expr();
+  return tree;
+}
+ 
+// ── Symbolic differentiation ──
+function diff(node, v){
+  if(!node) return num(0);
+  switch(node.type){
+    case 'num': return num(0);
+    case 'var': return {type:'num', val: node.name===v ? '1':'0'};
+    case 'neg': return neg(diff(node.operand, v));
+    case 'binop': {
+      const {op,left,right}=node;
+      if(op==='+') return add(diff(left,v), diff(right,v));
+      if(op==='-') return sub(diff(left,v), diff(right,v));
+      if(op==='*'){
+        // product rule: u'v + uv'
+        return add(mul(diff(left,v), right), mul(left, diff(right,v)));
+      }
+      if(op==='/'){
+        // quotient rule: (u'v - uv') / v^2
+        return div(sub(mul(diff(left,v),right), mul(left,diff(right,v))), pow(right,num(2)));
+      }
+      if(op==='^'){
+        // If exponent is constant: n*x^(n-1)*dx
+        if(!containsVar(right,v)){
+          const n=right;
+          return mul(mul(n, pow(left, sub(n, num(1)))), diff(left,v));
+        }
+        // If base is constant: a^u * ln(a) * du
+        if(!containsVar(left,v)){
+          return mul(mul(pow(left,right), func('ln',left)), diff(right,v));
+        }
+        // General: e^(right*ln(left)) via chain rule
+        // d/dv [u^w] = u^w * (w'*ln(u) + w*u'/u)
+        return mul(pow(left,right),
+          add(mul(diff(right,v), func('ln',left)),
+              mul(right, div(diff(left,v), left))));
+      }
+      break;
+    }
+    case 'func': {
+      const {name,arg}=node;
+      const da=diff(arg,v);
+      let dOuter;
+      if(name==='sin') dOuter=func('cos',arg);
+      else if(name==='cos') dOuter=neg(func('sin',arg));
+      else if(name==='tan') dOuter=div(num(1), pow(func('cos',arg),num(2)));
+      else if(name==='exp'||name==='e') dOuter=func('exp',arg);
+      else if(name==='log'||name==='ln') dOuter=div(num(1),arg);
+      else if(name==='sqrt') dOuter=div(num(1), mul(num(2), func('sqrt',arg)));
+      else if(name==='abs') dOuter=div(arg, func('abs',arg));
+      else dOuter=num(1); // fallback
+      return mul(dOuter, da);
+    }
+  }
+  return num(0);
+}
+ 
+function containsVar(node, v){
+  if(!node) return false;
+  if(node.type==='var') return node.name===v;
+  if(node.type==='num') return false;
+  if(node.type==='neg') return containsVar(node.operand,v);
+  if(node.type==='binop') return containsVar(node.left,v)||containsVar(node.right,v);
+  if(node.type==='func') return containsVar(node.arg,v);
+  return false;
+}
+ 
+// ── AST helpers ──
+function num(n){ return {type:'num',val:String(n)}; }
+function neg(a){ if(a.type==='num'&&a.val==='0') return num(0); return {type:'neg',operand:a}; }
+function add(a,b){
+  if(isZero(a)) return b; if(isZero(b)) return a;
+  return {type:'binop',op:'+',left:a,right:b};
+}
+function sub(a,b){
+  if(isZero(b)) return a; if(isZero(a)) return neg(b);
+  return {type:'binop',op:'-',left:a,right:b};
+}
+function mul(a,b){
+  if(isZero(a)||isZero(b)) return num(0);
+  if(isOne(a)) return b; if(isOne(b)) return a;
+  if(isNeg1(a)) return neg(b); if(isNeg1(b)) return neg(a);
+  return {type:'binop',op:'*',left:a,right:b};
+}
+function div(a,b){
+  if(isZero(a)) return num(0); if(isOne(b)) return a;
+  return {type:'binop',op:'/',left:a,right:b};
+}
+function pow(a,b){
+  if(isZero(b)) return num(1); if(isOne(b)) return a;
+  return {type:'binop',op:'^',left:a,right:b};
+}
+function func(name,arg){ return {type:'func',name,arg}; }
+function isZero(n){ return n.type==='num'&&(n.val==='0'||Number(n.val)===0); }
+function isOne(n){ return n.type==='num'&&Number(n.val)===1; }
+function isNeg1(n){ return n.type==='num'&&Number(n.val)===-1; }
+ 
+// ── Pretty-print AST → string ──
+function prettyPrint(node, parentPrec=0){
+  if(!node) return '0';
+  switch(node.type){
+    case 'num': {
+      const v=Number(node.val);
+      // Display fractions nicely if integer
+      if(Number.isInteger(v)) return String(v);
+      // Round for display
+      return String(parseFloat(v.toFixed(4)));
+    }
+    case 'var': return node.name;
+    case 'neg': {
+      const inner=prettyPrint(node.operand,3);
+      const needP=(node.operand.type==='binop'&&['+','-'].includes(node.operand.op));
+      return needP ? `-(${inner})` : `-${inner}`;
+    }
+    case 'binop': {
+      const prec={'+':1,'-':1,'*':2,'/':2,'^':3};
+      const myP=prec[node.op]||0;
+      let l=prettyPrint(node.left, myP);
+      let r=prettyPrint(node.right, myP+(node.op==='^'?1:0));
+      // Wrap in parens if needed
+      const lNode=node.left;
+      const rNode=node.right;
+      if(lNode.type==='binop'&&prec[lNode.op]<myP) l=`(${l})`;
+      if(rNode.type==='binop'){
+        const rp=prec[rNode.op];
+        if(rp<myP||(rp===myP&&(node.op==='-'||node.op==='/'))) r=`(${r})`;
+      }
+      if(rNode.type==='neg') r=`(${r})`;
+      if(node.op==='*'){
+        // Check if we can use implicit multiply or coefficient display
+        const lIsNum=(lNode.type==='num');
+        const rIsVar=(rNode.type==='var');
+        const rIsPow=(rNode.type==='binop'&&rNode.op==='^');
+        const rIsFunc=(rNode.type==='func');
+        // e.g. 2*x → 2x, 2*x^2 → 2x², etc.
+        if(lIsNum && (rIsVar||rIsPow||rIsFunc)) return `${l}${r}`;
+      }
+      return `${l} ${node.op} ${r}`;
+    }
+    case 'func': {
+      const arg=prettyPrint(node.arg,0);
+      const name=node.name==='log'?'ln':node.name;
+      return `${name}(${arg})`;
+    }
+  }
+  return '?';
+}
+ 
+// ── Numeric evaluator on AST ──
+function evalAST(node,x,y){
+  if(!node) return 0;
+  switch(node.type){
+    case 'num': return Number(node.val);
+    case 'var': if(node.name==='x') return x; if(node.name==='y') return y; if(node.name==='e') return Math.E; if(node.name==='pi') return Math.PI; return 0;
+    case 'neg': return -evalAST(node.operand,x,y);
+    case 'binop': {
+      const l=evalAST(node.left,x,y), r=evalAST(node.right,x,y);
+      if(node.op==='+') return l+r;
+      if(node.op==='-') return l-r;
+      if(node.op==='*') return l*r;
+      if(node.op==='/') return l/r;
+      if(node.op==='^') return Math.pow(l,r);
+      break;
+    }
+    case 'func': {
+      const a=evalAST(node.arg,x,y);
+      if(node.name==='sin') return Math.sin(a);
+      if(node.name==='cos') return Math.cos(a);
+      if(node.name==='tan') return Math.tan(a);
+      if(node.name==='exp') return Math.exp(a);
+      if(node.name==='log'||node.name==='ln') return Math.log(a);
+      if(node.name==='sqrt') return Math.sqrt(a);
+      if(node.name==='abs') return Math.abs(a);
+      break;
+    }
+  }
+  return NaN;
+}
+ 
+// ── Compile a string → AST (with preprocessing) ──
+function parseExpr(expr){
+  let e=expr.trim();
+  // Handle implicit multiply: 2x → 2*x, )(x → )*(x etc.
+  e=e.replace(/(\d)([a-zA-Z(])/g,'$1*$2');
+  e=e.replace(/([a-zA-Z)])(\()/g,'$1*$2');
+  // restore function names: sin*(x) → sin(x)
+  const fns=['sin','cos','tan','exp','sqrt','abs','log','ln'];
+  fns.forEach(fn=>{
+    const re=new RegExp(`\\b${fn}\\*\\(`, 'g');
+    e=e.replace(re, `${fn}(`);
+  });
+  // pi, e as vars already handled in evalAST
+  const tokens=tokenise(e);
+  return parse(tokens);
+}
+ 
+// ── Numeric central diff (backup check) ──
+let compiledFn=null;
+let currentAST=null;
+let currentFnStr='x^2*y + 2*x*y^2';
+ 
+function compileFunction(expr){
+  let e=expr.trim();
+  e=e.replace(/(\d)([a-zA-Z])/g,'$1*$2');
+  e=e.replace(/([a-zA-Z\d])\(/g,'$1*(');
+  e=e.replace(/\b(sin|cos|tan|exp|sqrt|abs|log|ln)\s*\*/g,'$1');
+  e=e.replace(/\^/g,'**');
+  e=e.replace(/\bln\b/g,'Math.log');
+  e=e.replace(/\blog\b/g,'Math.log');
+  e=e.replace(/\bsin\b/g,'Math.sin');
+  e=e.replace(/\bcos\b/g,'Math.cos');
+  e=e.replace(/\btan\b/g,'Math.tan');
+  e=e.replace(/\bexp\b/g,'Math.exp');
+  e=e.replace(/\bsqrt\b/g,'Math.sqrt');
+  e=e.replace(/\babs\b/g,'Math.abs');
+  e=e.replace(/\bpi\b/g,'Math.PI');
+  e=e.replace(/\be\b/g,'Math.E');
+  const fn=new Function('x','y',`"use strict"; return (${e});`);
+  const test=fn(1,1);
+  if(typeof test!=='number'||!isFinite(test)) throw new Error('Result is not finite at (1,1)');
+  return fn;
+}
+ 
 function loadFunction(){
-  const input = document.getElementById('funcInput').value.trim();
-  const errEl = document.getElementById('funcError');
+  const input=document.getElementById('funcInput').value.trim();
+  const errEl=document.getElementById('funcError');
   errEl.style.display='none';
-  if(!input){ errEl.textContent='Please enter a function.'; errEl.style.display='block'; return false; }
-  try {
-    compiledFn = compileFunction(input);
-    currentFnStr = input;
+  if(!input){errEl.textContent='Please enter a function.';errEl.style.display='block';return false;}
+  try{
+    compiledFn=compileFunction(input);
+    currentAST=parseExpr(input);
+    currentFnStr=input;
     document.getElementById('funcDisplayText').innerHTML=
       `f(<span class="var">x</span>, <span class="var">y</span>) = <span style="color:var(--text)">${escHtml(input)}</span>`;
-    // reset result
+    // Reset result area
+    document.getElementById('resultIdle').style.display='block';
+    document.getElementById('resultContent').style.display='none';
     const rc=document.getElementById('simResult');
     rc.className='result-card';
-    document.getElementById('resultVal').textContent='— Click Compute ∂f/∂x or ∂f/∂y —';
-    document.getElementById('resultFormula').textContent='';
-    document.getElementById('resultSteps').innerHTML='';
     showToast('Function loaded! Ready to differentiate.','ok');
     return true;
   } catch(err){
-    errEl.textContent=err.message;
+    errEl.textContent='Parse error: '+err.message;
     errEl.style.display='block';
-    compiledFn=null;
+    compiledFn=null; currentAST=null;
     showToast('Invalid function — check syntax.','err');
     return false;
   }
 }
-
-document.getElementById('btnLoadFunc').addEventListener('click', loadFunction);
-// Also load on Enter key in function input
-document.getElementById('funcInput').addEventListener('keydown', e=>{
-  if(e.key==='Enter') loadFunction();
-});
-
-// Quick example buttons
+ 
+document.getElementById('btnLoadFunc').addEventListener('click',loadFunction);
+document.getElementById('funcInput').addEventListener('keydown',e=>{ if(e.key==='Enter') loadFunction(); });
 document.querySelectorAll('#exampleBtns [data-fn]').forEach(btn=>{
-  btn.addEventListener('click',()=>{
-    document.getElementById('funcInput').value = btn.getAttribute('data-fn');
-    loadFunction();
-  });
+  btn.addEventListener('click',()=>{ document.getElementById('funcInput').value=btn.getAttribute('data-fn'); loadFunction(); });
 });
-
-// Numerical differentiation using central difference (high accuracy)
-function numericalDerivX(fn, x, y){
-  const h = 1e-5;
-  return (fn(x+h, y) - fn(x-h, y)) / (2*h);
-}
-function numericalDerivY(fn, x, y){
-  const h = 1e-5;
-  return (fn(x, y+h) - fn(x, y-h)) / (2*h);
-}
-
+ 
+function numericalDerivX(fn,x,y){ const h=1e-5; return (fn(x+h,y)-fn(x-h,y))/(2*h); }
+function numericalDerivY(fn,x,y){ const h=1e-5; return (fn(x,y+h)-fn(x,y-h))/(2*h); }
+ 
 function getSimVals(){
   let x=parseFloat(document.getElementById('simX').value);
   let y=parseFloat(document.getElementById('simY').value);
-  if(isNaN(x))x=0; if(isNaN(y))y=0;
+  if(isNaN(x)) x=0; if(isNaN(y)) y=0;
   return{x,y};
 }
-
+ 
+function showResult(wrtVar, symExpr, numVal, fval, x, y){
+  const isX=(wrtVar==='x');
+  const rc=document.getElementById('simResult');
+  rc.className='result-card '+(isX?'result-x':'result-y');
+  document.getElementById('resultIdle').style.display='none';
+  document.getElementById('resultContent').style.display='block';
+ 
+  const varColor=isX?'var(--accent)':'var(--accent2)';
+  const constVar=isX?'y':'x';
+  const constVal=isX?y:x;
+ 
+  // Symbolic panel
+  document.getElementById('symValue').innerHTML=
+    `<span style="color:${varColor}">∂f/∂${wrtVar}</span> = ${escHtml(symExpr)}`;
+ 
+  // Numerical panel
+  document.getElementById('numValue').innerHTML=
+    `<span style="color:var(--accent3)">${numVal.toFixed(6)}</span>`;
+  document.getElementById('numSub').textContent=`at (x=${x}, y=${y})`;
+ 
+  // Formula summary
+  document.getElementById('resultFormula').textContent=
+    `∂f/∂${wrtVar} evaluated at (x=${x}, y=${y})   |   f(x,y) = ${fval.toFixed(6)}`;
+ 
+  // Steps
+  document.getElementById('resultSteps').innerHTML=
+    `<strong>How it was computed:</strong><br>`+
+    `<span class="step-badge">1</span>Treat <strong>${constVar} = ${constVal}</strong> as a constant<br>`+
+    `<span class="step-badge">2</span><span class="sym-badge">Symbolic</span> Differentiate f algebraically w.r.t. <strong>${wrtVar}</strong> → `+
+      `<span style="color:var(--accent2);font-family:'Space Mono',monospace">${escHtml(symExpr)}</span><br>`+
+    `<span class="step-badge">3</span><span class="num-badge">Numerical</span> Substitute (x=${x}, y=${y}) into the derivative → `+
+      `<span style="color:var(--accent3);font-family:'Space Mono',monospace">${numVal.toFixed(6)}</span><br>`+
+    `<span class="step-badge">4</span>Verification via central difference: `+
+      `[f(${wrtVar}+h) − f(${wrtVar}−h)] / 2h ≈ `+
+      `<span style="color:var(--accent3);font-family:'Space Mono',monospace">${numVal.toFixed(6)}</span>`;
+}
+ 
 function computePartialX(){
-  if(!compiledFn){ showToast('Load a function first.','err'); return; }
+  if(!compiledFn||!currentAST){showToast('Load a function first.','err');return;}
   const{x,y}=getSimVals();
-  let deriv, fval;
-  try {
-    deriv = numericalDerivX(compiledFn, x, y);
-    fval  = compiledFn(x, y);
-  } catch(e){ showToast('Evaluation error at given x,y.','err'); return; }
-
-  const rc=document.getElementById('simResult');
-  rc.className='result-card result-x';
-  document.getElementById('resultVal').innerHTML=
-    `<span style="color:var(--accent)">∂f/∂x</span> = <span style="color:var(--accent3)">${deriv.toFixed(6)}</span>`;
-  document.getElementById('resultFormula').textContent=
-    `Numerical partial derivative w.r.t. x  |  at (x=${x}, y=${y})  |  f(x,y) = ${fval.toFixed(6)}`;
-  document.getElementById('resultSteps').innerHTML=
-    `<strong>Method — Central Difference:</strong><br>`+
-    `<span class="step-badge">1</span>Treat <strong>y = ${y}</strong> as a constant<br>`+
-    `<span class="step-badge">2</span>∂f/∂x ≈ [f(x+h, y) − f(x−h, y)] / 2h &nbsp; where h = 10⁻⁵<br>`+
-    `<span class="step-badge">3</span>f(${x}+h, ${y}) ≈ ${compiledFn(x+1e-5,y).toFixed(6)}<br>`+
-    `<span class="step-badge">4</span>f(${x}−h, ${y}) ≈ ${compiledFn(x-1e-5,y).toFixed(6)}<br>`+
-    `<span class="step-badge">5</span><strong>∂f/∂x = <span style="color:var(--accent3)">${deriv.toFixed(6)}</span></strong> &nbsp;(y held constant at ${y})`;
+  try{
+    const derivAST=diff(currentAST,'x');
+    const symExpr=prettyPrint(derivAST);
+    const numVal=numericalDerivX(compiledFn,x,y);
+    const fval=compiledFn(x,y);
+    showResult('x',symExpr,numVal,fval,x,y);
+  } catch(e){ showToast('Evaluation error at given x,y.','err'); }
 }
-
+ 
 function computePartialY(){
-  if(!compiledFn){ showToast('Load a function first.','err'); return; }
+  if(!compiledFn||!currentAST){showToast('Load a function first.','err');return;}
   const{x,y}=getSimVals();
-  let deriv, fval;
-  try {
-    deriv = numericalDerivY(compiledFn, x, y);
-    fval  = compiledFn(x, y);
-  } catch(e){ showToast('Evaluation error at given x,y.','err'); return; }
-
-  const rc=document.getElementById('simResult');
-  rc.className='result-card result-y';
-  document.getElementById('resultVal').innerHTML=
-    `<span style="color:var(--accent2)">∂f/∂y</span> = <span style="color:var(--accent3)">${deriv.toFixed(6)}</span>`;
-  document.getElementById('resultFormula').textContent=
-    `Numerical partial derivative w.r.t. y  |  at (x=${x}, y=${y})  |  f(x,y) = ${fval.toFixed(6)}`;
-  document.getElementById('resultSteps').innerHTML=
-    `<strong>Method — Central Difference:</strong><br>`+
-    `<span class="step-badge">1</span>Treat <strong>x = ${x}</strong> as a constant<br>`+
-    `<span class="step-badge">2</span>∂f/∂y ≈ [f(x, y+h) − f(x, y−h)] / 2h &nbsp; where h = 10⁻⁵<br>`+
-    `<span class="step-badge">3</span>f(${x}, ${y}+h) ≈ ${compiledFn(x,y+1e-5).toFixed(6)}<br>`+
-    `<span class="step-badge">4</span>f(${x}, ${y}−h) ≈ ${compiledFn(x,y-1e-5).toFixed(6)}<br>`+
-    `<span class="step-badge">5</span><strong>∂f/∂y = <span style="color:var(--accent3)">${deriv.toFixed(6)}</span></strong> &nbsp;(x held constant at ${x})`;
+  try{
+    const derivAST=diff(currentAST,'y');
+    const symExpr=prettyPrint(derivAST);
+    const numVal=numericalDerivY(compiledFn,x,y);
+    const fval=compiledFn(x,y);
+    showResult('y',symExpr,numVal,fval,x,y);
+  } catch(e){ showToast('Evaluation error at given x,y.','err'); }
 }
-
-document.getElementById('btnPartialX').addEventListener('click', computePartialX);
-document.getElementById('btnPartialY').addEventListener('click', computePartialY);
-
-// Live-update when x/y values change (if a derivative was already shown)
+ 
+document.getElementById('btnPartialX').addEventListener('click',computePartialX);
+document.getElementById('btnPartialY').addEventListener('click',computePartialY);
+ 
 function liveUpdate(){
   const cls=document.getElementById('simResult').className;
   if(cls.includes('result-x')) computePartialX();
   else if(cls.includes('result-y')) computePartialY();
 }
-document.getElementById('simX').addEventListener('input', liveUpdate);
-document.getElementById('simY').addEventListener('input', liveUpdate);
-
-// ── MCQ Scoring ───────────────────────────────────────────────
-function scoreForm(prefix,count){
+document.getElementById('simX').addEventListener('input',liveUpdate);
+document.getElementById('simY').addEventListener('input',liveUpdate);
+ 
+// ── MCQ Scoring ──────────────────────────────────────────────
+function scoreForm(prefix){
   let score=0;
   const qEls=document.querySelectorAll(`[data-q^="${prefix}"]`);
   qEls.forEach(qEl=>{
     const name=qEl.getAttribute('data-q');
     const correct=qEl.getAttribute('data-ans');
     const sel=document.querySelector(`input[name="${name}"]:checked`);
-    // reset styling
     qEl.querySelectorAll('.opt').forEach(o=>o.classList.remove('correct-ans','wrong-ans'));
     if(sel){
       const selOpt=sel.closest('.opt');
-      if(sel.value===correct){
-        selOpt.classList.add('correct-ans');
-        score++;
-      } else {
+      if(sel.value===correct){ selOpt.classList.add('correct-ans'); score++; }
+      else{
         selOpt.classList.add('wrong-ans');
-        // mark correct
         const corrInput=qEl.querySelector(`input[value="${correct}"]`);
         if(corrInput) corrInput.closest('.opt').classList.add('correct-ans');
       }
     } else {
-      // Mark correct for unanswered
       const corrInput=qEl.querySelector(`input[value="${correct}"]`);
       if(corrInput) corrInput.closest('.opt').classList.add('correct-ans');
     }
@@ -1106,58 +1294,43 @@ function scoreForm(prefix,count){
 function showScore(scoreNum,outOf,numId,titleId,subId,fillId,bannerId){
   const pct=Math.round((scoreNum/outOf)*100);
   document.getElementById(numId).textContent=`${scoreNum}/${outOf}`;
-  const grades=[
-    [100,'🏆 Perfect Score!','Outstanding mastery of partial differentiation.'],
-    [80,'⭐ Excellent!','Strong understanding demonstrated.'],
-    [60,'✅ Good Job!','Solid grasp — review the missed questions.'],
-    [40,'📚 Keep Practising','Revisit the Theory section.'],
-    [0,'🔁 Needs Work','Study the Theory and try again.'],
-  ];
+  const grades=[[100,'🏆 Perfect Score!','Outstanding mastery.'],[80,'⭐ Excellent!','Strong understanding.'],[60,'✅ Good Job!','Solid — review missed questions.'],[40,'📚 Keep Practising','Revisit Theory section.'],[0,'🔁 Needs Work','Study Theory and try again.']];
   const[,title,sub]=grades.find(([min])=>pct>=min);
   document.getElementById(titleId).textContent=title;
   document.getElementById(subId).textContent=sub+` (${pct}%)`;
   document.getElementById(fillId).style.width=pct+'%';
-  const banner=document.getElementById(bannerId);
-  banner.classList.add('visible');
+  document.getElementById(bannerId).classList.add('visible');
 }
-
-// ── Pretest ───────────────────────────────────────────────────
+ 
 function submitPretest(){
-  const score=scoreForm('pre',5);
+  const score=scoreForm('pre');
   showScore(score,5,'pretestScoreNum','pretestScoreTitle','pretestScoreSub','pretestFill','pretest-score');
   document.getElementById('pretestSubmitBtn').disabled=true;
   document.getElementById('pretestSubmitBtn').innerHTML='<i class="fas fa-check"></i> Submitted';
   showToast(`Pretest: ${score}/5 — Good start!`,'ok');
 }
-
-// ── Posttest ──────────────────────────────────────────────────
+ 
 function submitPosttest(){
-  const score=scoreForm('post',5);
+  const score=scoreForm('post');
   const name=(document.getElementById('studentName').value.trim()||'Anonymous Learner');
   const pct=((score/5)*100).toFixed(1);
   const timestamp=new Date().toLocaleString('en-IN',{dateStyle:'medium',timeStyle:'short'});
   const record={name,score,total:5,pct,timestamp};
-
-  // Save to localStorage
   let records=[];
   try{const e=localStorage.getItem('partialDiffResults');if(e)records=JSON.parse(e);}catch(e){}
   records.push(record);
   localStorage.setItem('partialDiffResults',JSON.stringify(records));
-
   showScore(score,5,'posttestScoreNum','posttestScoreTitle','posttestScoreSub','posttestFill','posttest-score');
-
   const msg=document.getElementById('saveMsg');
   msg.textContent=`✔ Record saved! ${name} scored ${score}/5 (${pct}%) on ${timestamp}`;
   msg.className='save-msg ok';
-
   document.getElementById('savePosttestBtn').disabled=true;
   document.getElementById('savePosttestBtn').innerHTML='<i class="fas fa-check"></i> Saved!';
-
   renderRecords();
   showToast(`${name}: ${score}/5 saved successfully!`,'ok');
 }
 document.getElementById('savePosttestBtn').addEventListener('click',submitPosttest);
-
+ 
 function renderRecords(){
   let records=[];
   try{const e=localStorage.getItem('partialDiffResults');if(e)records=JSON.parse(e);}catch(e){}
@@ -1175,42 +1348,38 @@ function renderRecords(){
     tbody.appendChild(tr);
   });
 }
-function escHtml(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
-
-// ── Feedback ──────────────────────────────────────────────────
+ 
+function escHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+ 
+// ── Feedback ──
 let selectedRating=0;
 const ratingLabels=['','😕 Poor','😐 Fair','🙂 Good','😊 Great','🤩 Excellent!'];
 document.querySelectorAll('.star-btn').forEach(btn=>{
   btn.addEventListener('click',()=>{
     selectedRating=parseInt(btn.getAttribute('data-val'));
     updateStars(selectedRating);
-    document.getElementById('ratingLabel').textContent=
-      `${selectedRating}/5 — ${ratingLabels[selectedRating]}`;
+    document.getElementById('ratingLabel').textContent=`${selectedRating}/5 — ${ratingLabels[selectedRating]}`;
   });
   btn.addEventListener('mouseover',()=>updateStars(parseInt(btn.getAttribute('data-val'))));
   btn.addEventListener('mouseout',()=>updateStars(selectedRating));
 });
-function updateStars(n){
-  document.querySelectorAll('.star-btn').forEach((s,i)=>{
-    s.classList.toggle('lit',i<n);
-  });
-}
+function updateStars(n){ document.querySelectorAll('.star-btn').forEach((s,i)=>s.classList.toggle('lit',i<n)); }
 function submitFeedback(){
   if(!selectedRating){showToast('Please select a star rating first.','err');return;}
-  const comment=document.getElementById('feedComment').value.trim()||'No comment.';
   showToast(`Thank you! ${ratingLabels[selectedRating]} rating saved.`,'ok');
-  // Reset
-  selectedRating=0;
-  updateStars(0);
+  selectedRating=0; updateStars(0);
   document.getElementById('ratingLabel').textContent='No rating selected';
   document.getElementById('feedComment').value='';
   setTimeout(goBack,1200);
 }
-
-// ── Init ──────────────────────────────────────────────────────
+ 
+// ── Init ──
 window.addEventListener('load',()=>{
-  // initial simulator state
-  computePartialX();
+  // Pre-load default function
+  try{
+    compiledFn=compileFunction(currentFnStr);
+    currentAST=parseExpr(currentFnStr);
+  } catch(e){}
   renderRecords();
 });
 </script>
