@@ -3,23 +3,31 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Virtual Labs | Partial Differentiation Simulator — PCCoE</title>
+<title>Virtual Labs | Signals & Systems Simulator — PCCoE</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Sora:wght@300;400;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/hammerjs@2.0.8/hammer.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@2.0.1/dist/chartjs-plugin-zoom.min.js"></script>
 <style>
 :root {
-  --bg: #0a0e1a;
-  --surface: #111827;
-  --surface2: #1a2236;
-  --border: rgba(99,179,237,0.15);
-  --accent: #38bdf8;
-  --accent2: #818cf8;
-  --accent3: #34d399;
-  --warn: #fb923c;
-  --text: #e2e8f0;
-  --muted: #8899b0;
-  --card-glow: 0 0 0 1px rgba(56,189,248,0.12), 0 8px 32px rgba(0,0,0,0.4);
+  --bg: #f5f8fc;
+  --surface: #ffffff;
+  --surface2: #eef3fa;
+  --surface3: #e2eaf6;
+  --border: #d4e0f0;
+  --border-dark: #b8c9e0;
+  --accent: #2563eb;
+  --accent2: #7c3aed;
+  --accent3: #059669;
+  --warn: #ea580c;
+  --text: #0f172a;
+  --text2: #1e293b;
+  --muted: #64748b;
+  --muted2: #94a3b8;
+  --shadow: 0 4px 16px rgba(15,23,42,0.06);
+  --shadow-lg: 0 12px 36px rgba(15,23,42,0.10);
 }
 *{margin:0;padding:0;box-sizing:border-box;}
 html{scroll-behavior:smooth;}
@@ -35,18 +43,19 @@ body::before{
   position:fixed;
   inset:0;
   background-image:
-    linear-gradient(rgba(56,189,248,0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(56,189,248,0.04) 1px, transparent 1px);
+    linear-gradient(rgba(37,99,235,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(37,99,235,0.03) 1px, transparent 1px);
   background-size:48px 48px;
   pointer-events:none;
   z-index:0;
 }
 header{
-  background: linear-gradient(180deg, #0d1426 0%, rgba(10,14,26,0) 100%);
+  background: linear-gradient(180deg, #ffffff 0%, #f0f6ff 100%);
   border-bottom:1px solid var(--border);
   padding:16px 0;
   position:sticky;top:0;z-index:100;
   backdrop-filter:blur(12px);
+  box-shadow:0 1px 12px rgba(15,23,42,0.04);
 }
 .hdr{
   max-width:1280px;margin:0 auto;padding:0 24px;
@@ -59,7 +68,7 @@ header{
 }
 .college-badge img{
   width:46px;height:46px;border-radius:10px;object-fit:contain;
-  background:#1a2236;padding:4px;
+  background:#f1f5fb;padding:4px;
 }
 .college-badge .ct{line-height:1.3;}
 .college-badge .ct strong{display:block;font-size:12px;font-weight:700;color:var(--accent);letter-spacing:.04em;text-transform:uppercase;}
@@ -80,7 +89,7 @@ header{
 #dashboard-hero{text-align:center;padding:56px 0 40px;}
 #dashboard-hero .eyebrow{
   display:inline-flex;align-items:center;gap:8px;
-  background:rgba(56,189,248,.08);border:1px solid rgba(56,189,248,.2);
+  background:rgba(37,99,235,.08);border:1px solid rgba(37,99,235,.2);
   padding:5px 14px;border-radius:40px;font-size:12px;color:var(--accent);
   font-family:'Space Mono',monospace;margin-bottom:20px;
 }
@@ -104,16 +113,17 @@ header{
   cursor:pointer;
   transition:transform .25s, box-shadow .25s, border-color .25s;
   position:relative;overflow:hidden;
+  box-shadow:var(--shadow);
 }
 .nav-card::before{
   content:'';position:absolute;inset:0;
-  background:radial-gradient(circle at 50% -20%, rgba(56,189,248,.08) 0%, transparent 70%);
+  background:radial-gradient(circle at 50% -20%, rgba(37,99,235,.08) 0%, transparent 70%);
   opacity:0;transition:opacity .3s;
 }
 .nav-card:hover{
   transform:translateY(-6px);
-  border-color:rgba(56,189,248,.4);
-  box-shadow:0 20px 40px rgba(0,0,0,.3), 0 0 0 1px rgba(56,189,248,.15);
+  border-color:rgba(37,99,235,.4);
+  box-shadow:var(--shadow-lg);
 }
 .nav-card:hover::before{opacity:1;}
 .nav-card .icon{
@@ -122,14 +132,14 @@ header{
 }
 .nav-card h3{font-size:15px;font-weight:700;margin-bottom:4px;}
 .nav-card p{font-size:12px;color:var(--muted);}
-.ic-aim{background:rgba(56,189,248,.12);color:var(--accent);}
-.ic-theory{background:rgba(129,140,248,.12);color:var(--accent2);}
-.ic-pre{background:rgba(251,146,60,.12);color:var(--warn);}
-.ic-sim{background:rgba(52,211,153,.12);color:var(--accent3);}
-.ic-post{background:rgba(56,189,248,.12);color:var(--accent);}
-.ic-ref{background:rgba(129,140,248,.12);color:var(--accent2);}
-.ic-cont{background:rgba(52,211,153,.12);color:var(--accent3);}
-.ic-feed{background:rgba(251,146,60,.12);color:var(--warn);}
+.ic-aim{background:rgba(37,99,235,.12);color:var(--accent);}
+.ic-theory{background:rgba(124,58,237,.12);color:var(--accent2);}
+.ic-pre{background:rgba(234,88,12,.12);color:var(--warn);}
+.ic-sim{background:rgba(5,150,105,.12);color:var(--accent3);}
+.ic-post{background:rgba(37,99,235,.12);color:var(--accent);}
+.ic-ref{background:rgba(124,58,237,.12);color:var(--accent2);}
+.ic-cont{background:rgba(5,150,105,.12);color:var(--accent3);}
+.ic-feed{background:rgba(234,88,12,.12);color:var(--warn);}
 .page{display:none;animation:fadeUp .35s ease both;}
 .page.active{display:block;}
 @keyframes fadeUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
@@ -151,6 +161,7 @@ header{
   background:var(--surface);border:1px solid var(--border);
   border-radius:20px;padding:28px 32px;
   border-left:3px solid var(--accent);
+  box-shadow:var(--shadow);
 }
 .content-box h4{font-size:14px;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);margin-bottom:12px;}
 .content-box p, .content-box li{color:var(--muted);line-height:1.8;margin-bottom:8px;}
@@ -165,10 +176,11 @@ header{
 .mcq-q{
   background:var(--surface);border:1px solid var(--border);
   border-radius:16px;padding:20px 22px;
+  box-shadow:var(--shadow);
 }
 .mcq-q .q-text{font-weight:600;margin-bottom:14px;font-size:15px;}
 .mcq-q .q-num{
-  display:inline-block;background:rgba(56,189,248,.12);
+  display:inline-block;background:rgba(37,99,235,.12);
   color:var(--accent);border-radius:6px;padding:1px 8px;
   font-family:'Space Mono',monospace;font-size:13px;margin-right:8px;
 }
@@ -178,13 +190,13 @@ header{
   padding:10px 14px;border-radius:10px;cursor:pointer;
   border:1px solid transparent;transition:all .2s;
 }
-.opt:hover{background:rgba(56,189,248,.06);border-color:rgba(56,189,248,.2);}
+.opt:hover{background:rgba(37,99,235,.06);border-color:rgba(37,99,235,.2);}
 .opt input[type=radio]{
   width:16px;height:16px;accent-color:var(--accent);flex-shrink:0;cursor:pointer;
 }
 .opt label{cursor:pointer;font-size:14px;color:var(--text);}
-.opt.correct-ans{background:rgba(52,211,153,.08);border-color:rgba(52,211,153,.3);}
-.opt.wrong-ans{background:rgba(239,68,68,.08);border-color:rgba(239,68,68,.3);}
+.opt.correct-ans{background:rgba(5,150,105,.08);border-color:rgba(5,150,105,.3);}
+.opt.wrong-ans{background:rgba(220,38,38,.08);border-color:rgba(220,38,38,.3);}
 .btn{
   display:inline-flex;align-items:center;gap:8px;
   padding:12px 26px;border-radius:40px;font-weight:700;
@@ -192,25 +204,75 @@ header{
   font-family:'Sora',sans-serif;
 }
 .btn-primary{
-  background:linear-gradient(135deg,var(--accent),#0ea5e9);
-  color:#0a0e1a;
-  box-shadow:0 4px 20px rgba(56,189,248,.3);
+  background:linear-gradient(135deg,var(--accent),#1d4ed8);
+  color:#fff;
+  box-shadow:0 4px 20px rgba(37,99,235,.3);
 }
-.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(56,189,248,.45);}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(37,99,235,.45);}
 .btn-secondary{background:var(--surface2);border:1px solid var(--border);color:var(--text);}
 .btn-secondary:hover{border-color:var(--accent);color:var(--accent);}
 .btn-success{
-  background:linear-gradient(135deg,var(--accent3),#059669);
-  color:#0a0e1a;
-  box-shadow:0 4px 20px rgba(52,211,153,.3);
+  background:linear-gradient(135deg,var(--accent3),#047857);
+  color:#fff;
+  box-shadow:0 4px 20px rgba(5,150,105,.3);
 }
 .btn-success:hover{transform:translateY(-2px);}
- 
-/* ── SIMULATOR ── */
+.score-banner{
+  display:none;background:var(--surface2);
+  border:1px solid var(--border);border-radius:16px;
+  padding:20px 24px;margin-top:16px;
+  align-items:center;gap:20px;flex-wrap:wrap;
+  box-shadow:var(--shadow);
+}
+.score-banner.visible{display:flex;}
+.score-num{font-family:'Space Mono',monospace;font-size:2.4rem;font-weight:700;color:var(--accent3);}
+.score-info .title{font-weight:700;font-size:15px;}
+.score-info .sub{font-size:13px;color:var(--muted);}
+.progress-bar{flex:1;min-width:140px;background:rgba(15,23,42,.06);border-radius:40px;height:8px;overflow:hidden;}
+.progress-fill{height:100%;border-radius:40px;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width 1s ease;}
+.student-row{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;margin:16px 0;box-shadow:var(--shadow);}
+.student-row label{display:block;font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;}
+.student-row input{width:100%;padding:11px 16px;background:var(--surface2);border:1px solid var(--border);border-radius:12px;color:var(--text);font-size:14px;transition:.2s;}
+.student-row input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(37,99,235,.15);}
+.save-msg{display:none;padding:12px 20px;border-radius:12px;font-size:14px;font-weight:600;margin-top:14px;}
+.save-msg.ok{display:block;background:rgba(5,150,105,.1);border:1px solid rgba(5,150,105,.3);color:var(--accent3);}
+.save-msg.err{display:block;background:rgba(220,38,38,.1);border:1px solid rgba(220,38,38,.3);color:#dc2626;}
+.ref-list{display:flex;flex-direction:column;gap:12px;margin-top:4px;}
+.ref-item{display:flex;align-items:center;gap:14px;background:var(--surface2);border:1px solid var(--border);border-radius:14px;padding:14px 18px;box-shadow:var(--shadow);}
+.ref-item .ref-icon{width:36px;height:36px;border-radius:10px;background:rgba(37,99,235,.1);color:var(--accent);display:grid;place-items:center;font-size:16px;flex-shrink:0;}
+.ref-item .ref-title{font-weight:600;font-size:14px;}
+.ref-item .ref-sub{font-size:12px;color:var(--muted);}
+.contrib-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px;}
+.contrib-card{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:24px;text-align:center;transition:border-color .2s,transform .2s;box-shadow:var(--shadow);}
+.contrib-card:hover{border-color:rgba(37,99,235,.3);transform:translateY(-4px);box-shadow:var(--shadow-lg);}
+.contrib-avatar{width:60px;height:60px;border-radius:50%;margin:0 auto 14px;display:grid;place-items:center;font-size:24px;}
+.contrib-card h4{font-weight:700;font-size:15px;margin-bottom:4px;}
+.contrib-card p{font-size:12px;color:var(--muted);}
+.contrib-card .roll{font-family:'Space Mono',monospace;font-size:11px;color:var(--accent);margin-top:4px;}
+.star-row{display:flex;gap:8px;margin:12px 0;}
+.star-btn{font-size:28px;cursor:pointer;color:var(--muted2);transition:transform .15s,color .15s;background:none;border:none;padding:4px;}
+.star-btn:hover,.star-btn.lit{color:#f59e0b;transform:scale(1.2);}
+.feed-area{width:100%;padding:14px 16px;background:var(--surface2);border:1px solid var(--border);border-radius:14px;color:var(--text);font-size:14px;resize:vertical;min-height:100px;font-family:'Sora',sans-serif;transition:.2s;margin:12px 0 16px;}
+.feed-area:focus{outline:none;border-color:var(--accent);}
+.results-table-wrap{margin-top:20px;overflow-x:auto;}
+.results-table{width:100%;border-collapse:collapse;font-size:13px;}
+.results-table th{background:var(--surface2);padding:10px 14px;text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);border-bottom:1px solid var(--border);}
+.results-table td{padding:10px 14px;border-bottom:1px solid rgba(15,23,42,.04);}
+.results-table tr:hover td{background:rgba(37,99,235,.03);}
+.badge-score{background:rgba(5,150,105,.1);color:var(--accent3);border-radius:6px;padding:2px 8px;font-family:'Space Mono',monospace;font-size:12px;}
+.toast{position:fixed;bottom:28px;right:28px;z-index:999;background:var(--surface);border:1px solid var(--border);padding:14px 22px;border-radius:14px;font-size:14px;box-shadow:var(--shadow-lg);transform:translateY(20px);opacity:0;transition:transform .3s,opacity .3s;pointer-events:none;display:flex;align-items:center;gap:10px;}
+.toast.show{transform:translateY(0);opacity:1;}
+.toast.t-ok .toast-icon{color:var(--accent3);}
+.toast.t-err .toast-icon{color:#dc2626;}
+footer{text-align:center;padding:28px;border-top:1px solid var(--border);font-size:12px;color:var(--muted);position:relative;z-index:1;}
+footer span{color:var(--accent);}
+
+/* ── SIMULATOR SPECIFIC ── */
 .sim-panel{display:flex;flex-direction:column;gap:20px;}
 .func-card{
-  background:var(--surface2);border:1px solid var(--border);
+  background:var(--surface);border:1px solid var(--border);
   border-radius:16px;padding:20px;text-align:center;
+  box-shadow:var(--shadow);
 }
 .func-card .label{font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:8px;}
 .func-display{
@@ -227,7 +289,14 @@ header{
   border-radius:12px;color:var(--text);font-size:1rem;
   font-family:'Space Mono',monospace;transition:.2s;
 }
-.inp-group input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(56,189,248,.15);}
+.inp-group input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(37,99,235,.15);}
+.inp-group select{
+  width:100%;padding:12px 16px;
+  background:var(--surface2);border:1px solid var(--border);
+  border-radius:12px;color:var(--text);font-size:14px;
+  font-family:'Sora',sans-serif;transition:.2s;cursor:pointer;
+}
+.inp-group select:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(37,99,235,.15);}
 .sim-btns{display:flex;gap:12px;flex-wrap:wrap;}
 .sim-btn{
   flex:1;min-width:200px;
@@ -235,127 +304,92 @@ header{
   font-size:14px;cursor:pointer;border:none;transition:all .2s;
   font-family:'Sora',sans-serif;display:flex;align-items:center;justify-content:center;gap:10px;
 }
-.sim-btn-x{background:linear-gradient(135deg,rgba(56,189,248,.15),rgba(56,189,248,.05));border:1px solid rgba(56,189,248,.3);color:var(--accent);}
-.sim-btn-x:hover{background:rgba(56,189,248,.2);transform:translateY(-2px);}
-.sim-btn-y{background:linear-gradient(135deg,rgba(129,140,248,.15),rgba(129,140,248,.05));border:1px solid rgba(129,140,248,.3);color:var(--accent2);}
-.sim-btn-y:hover{background:rgba(129,140,248,.2);transform:translateY(-2px);}
- 
-/* ── Enhanced dual result display ── */
-.result-card{
-  background:var(--surface2);border:1px solid var(--border);
-  border-radius:16px;padding:24px;
-  transition:border-color .3s;
+.sim-btn-x{background:linear-gradient(135deg,rgba(37,99,235,.12),rgba(37,99,235,.05));border:1px solid rgba(37,99,235,.3);color:var(--accent);}
+.sim-btn-x:hover{background:rgba(37,99,235,.18);transform:translateY(-2px);}
+.sim-btn-y{background:linear-gradient(135deg,rgba(124,58,237,.12),rgba(124,58,237,.05));border:1px solid rgba(124,58,237,.3);color:var(--accent2);}
+.sim-btn-y:hover{background:rgba(124,58,237,.18);transform:translateY(-2px);}
+.sim-btn-g{background:linear-gradient(135deg,rgba(5,150,105,.12),rgba(5,150,105,.05));border:1px solid rgba(5,150,105,.3);color:var(--accent3);}
+.sim-btn-g:hover{background:rgba(5,150,105,.18);transform:translateY(-2px);}
+
+.chart-container {
+  position: relative;
+  height: 320px;
+  width: 100%;
+  margin-top: 1.2rem;
+  margin-bottom: 0.5rem;
+  background: var(--surface);
+  border-radius: 12px;
+  padding: 12px;
+  border: 1px solid var(--border);
+  box-shadow:var(--shadow);
 }
-.result-card.result-x{border-color:rgba(56,189,248,.4);}
-.result-card.result-y{border-color:rgba(129,140,248,.4);}
-.result-card .r-label{font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:16px;display:flex;align-items:center;gap:8px;}
- 
-/* Dual panel: symbolic + numerical side by side */
-.dual-result{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;}
-@media(max-width:640px){.dual-result{grid-template-columns:1fr;}}
-.result-panel{
-  background:var(--bg);border:1px solid var(--border);
-  border-radius:12px;padding:16px 18px;
-  position:relative;overflow:hidden;
+canvas { display: block; width: 100% !important; height: auto !important; max-height: 300px; }
+
+.chart-hint{
+  font-size:11px;color:var(--muted2);text-align:center;
+  margin-top:6px;font-family:'Space Mono',monospace;
 }
-.result-panel::before{
-  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+.chart-hint i{color:var(--accent);}
+
+.op-btn {
+  background: var(--surface2);
+  color: var(--text);
+  border: 1px solid var(--border);
+  box-shadow: none;
+  font-weight: 500;
+  padding: 8px 16px;
+  border-radius: 30px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all .2s;
+  font-family: 'Sora', sans-serif;
 }
-.result-panel.sym-panel::before{background:linear-gradient(90deg,var(--accent2),transparent);}
-.result-panel.num-panel::before{background:linear-gradient(90deg,var(--accent3),transparent);}
-.result-panel .rp-tag{
-  font-size:10px;text-transform:uppercase;letter-spacing:.12em;
-  color:var(--muted);margin-bottom:10px;display:flex;align-items:center;gap:6px;
+.op-btn.active {
+  background: linear-gradient(135deg, var(--accent), #1d4ed8);
+  color: #fff;
+  border-color: var(--accent);
+  box-shadow: 0 4px 12px rgba(37,99,235,.3);
 }
-.result-panel .rp-tag .dot{
-  width:7px;height:7px;border-radius:50%;display:inline-block;
+.op-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
 }
-.sym-panel .dot{background:var(--accent2);}
-.num-panel .dot{background:var(--accent3);}
-.sym-value{
-  font-family:'Space Mono',monospace;font-size:1.05rem;font-weight:700;
-  color:var(--accent2);word-break:break-all;line-height:1.5;
+.op-btn.active:hover { color: #fff; }
+
+.radio-group {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  background: var(--surface2);
+  padding: 0.4rem 0.9rem;
+  border-radius: 40px;
+  border: 1px solid var(--border);
 }
-.num-value{
-  font-family:'Space Mono',monospace;font-size:1.8rem;font-weight:700;
-  color:var(--accent3);
+.radio-group label {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-weight: 400;
+  font-size: 13px;
+  cursor: pointer;
 }
-.num-sub{font-size:11px;color:var(--muted);margin-top:4px;}
-.result-formula{font-family:'Space Mono',monospace;font-size:12px;color:var(--muted);margin-bottom:16px;padding:8px 12px;background:rgba(255,255,255,.03);border-radius:8px;}
-.result-steps{
-  margin-top:4px;padding-top:16px;border-top:1px solid var(--border);
-  font-size:13px;color:var(--muted);line-height:1.9;
+.radio-group input[type=radio] { accent-color: var(--accent); }
+
+.status-badge {
+  font-size: 0.8rem;
+  background: rgba(37,99,235,.1);
+  color: var(--accent);
+  padding: 0.2rem 0.9rem;
+  border-radius: 30px;
+  font-weight: 500;
+  font-family: 'Space Mono', monospace;
+  border: 1px solid rgba(37,99,235,.2);
+  display: inline-block;
 }
-.result-steps strong{color:var(--text);}
-.step-badge{
-  display:inline-block;background:rgba(56,189,248,.1);
-  border:1px solid rgba(56,189,248,.2);color:var(--accent);
-  border-radius:6px;padding:1px 8px;font-family:'Space Mono',monospace;font-size:12px;margin-right:6px;
-}
-.sym-badge{
-  display:inline-block;background:rgba(129,140,248,.1);
-  border:1px solid rgba(129,140,248,.2);color:var(--accent2);
-  border-radius:6px;padding:1px 8px;font-family:'Space Mono',monospace;font-size:12px;
-}
-.num-badge{
-  display:inline-block;background:rgba(52,211,153,.1);
-  border:1px solid rgba(52,211,153,.2);color:var(--accent3);
-  border-radius:6px;padding:1px 8px;font-family:'Space Mono',monospace;font-size:12px;
-}
-.idle-state{
-  text-align:center;padding:32px;color:var(--muted);font-size:14px;
-}
-.idle-state i{font-size:28px;margin-bottom:12px;display:block;opacity:.4;}
- 
-/* score, mcq, posttest etc */
-.score-banner{
-  display:none;background:var(--surface2);
-  border:1px solid var(--border);border-radius:16px;
-  padding:20px 24px;margin-top:16px;
-  align-items:center;gap:20px;flex-wrap:wrap;
-}
-.score-banner.visible{display:flex;}
-.score-num{font-family:'Space Mono',monospace;font-size:2.4rem;font-weight:700;color:var(--accent3);}
-.score-info .title{font-weight:700;font-size:15px;}
-.score-info .sub{font-size:13px;color:var(--muted);}
-.progress-bar{flex:1;min-width:140px;background:rgba(255,255,255,.06);border-radius:40px;height:8px;overflow:hidden;}
-.progress-fill{height:100%;border-radius:40px;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width 1s ease;}
-.student-row{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;margin:16px 0;}
-.student-row label{display:block;font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;}
-.student-row input{width:100%;padding:11px 16px;background:var(--surface2);border:1px solid var(--border);border-radius:12px;color:var(--text);font-size:14px;transition:.2s;}
-.student-row input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(56,189,248,.15);}
-.save-msg{display:none;padding:12px 20px;border-radius:12px;font-size:14px;font-weight:600;margin-top:14px;}
-.save-msg.ok{display:block;background:rgba(52,211,153,.1);border:1px solid rgba(52,211,153,.3);color:var(--accent3);}
-.save-msg.err{display:block;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);color:#f87171;}
-.ref-list{display:flex;flex-direction:column;gap:12px;margin-top:4px;}
-.ref-item{display:flex;align-items:center;gap:14px;background:var(--surface2);border:1px solid var(--border);border-radius:14px;padding:14px 18px;}
-.ref-item .ref-icon{width:36px;height:36px;border-radius:10px;background:rgba(56,189,248,.1);color:var(--accent);display:grid;place-items:center;font-size:16px;flex-shrink:0;}
-.ref-item .ref-title{font-weight:600;font-size:14px;}
-.ref-item .ref-sub{font-size:12px;color:var(--muted);}
-.contrib-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px;}
-.contrib-card{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:24px;text-align:center;transition:border-color .2s,transform .2s;}
-.contrib-card:hover{border-color:rgba(56,189,248,.3);transform:translateY(-4px);}
-.contrib-avatar{width:60px;height:60px;border-radius:50%;margin:0 auto 14px;display:grid;place-items:center;font-size:24px;}
-.contrib-card h4{font-weight:700;font-size:15px;margin-bottom:4px;}
-.contrib-card p{font-size:12px;color:var(--muted);}
-.contrib-card .roll{font-family:'Space Mono',monospace;font-size:11px;color:var(--accent);margin-top:4px;}
-.star-row{display:flex;gap:8px;margin:12px 0;}
-.star-btn{font-size:28px;cursor:pointer;color:var(--muted);transition:transform .15s,color .15s;background:none;border:none;padding:4px;}
-.star-btn:hover,.star-btn.lit{color:#fbbf24;transform:scale(1.2);}
-.feed-area{width:100%;padding:14px 16px;background:var(--surface2);border:1px solid var(--border);border-radius:14px;color:var(--text);font-size:14px;resize:vertical;min-height:100px;font-family:'Sora',sans-serif;transition:.2s;margin:12px 0 16px;}
-.feed-area:focus{outline:none;border-color:var(--accent);}
-.results-table-wrap{margin-top:20px;overflow-x:auto;}
-.results-table{width:100%;border-collapse:collapse;font-size:13px;}
-.results-table th{background:var(--surface2);padding:10px 14px;text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);border-bottom:1px solid var(--border);}
-.results-table td{padding:10px 14px;border-bottom:1px solid rgba(255,255,255,.04);}
-.results-table tr:hover td{background:rgba(56,189,248,.03);}
-.badge-score{background:rgba(52,211,153,.1);color:var(--accent3);border-radius:6px;padding:2px 8px;font-family:'Space Mono',monospace;font-size:12px;}
-.toast{position:fixed;bottom:28px;right:28px;z-index:999;background:var(--surface2);border:1px solid var(--border);padding:14px 22px;border-radius:14px;font-size:14px;box-shadow:0 12px 40px rgba(0,0,0,.4);transform:translateY(20px);opacity:0;transition:transform .3s,opacity .3s;pointer-events:none;display:flex;align-items:center;gap:10px;}
-.toast.show{transform:translateY(0);opacity:1;}
-.toast.t-ok .toast-icon{color:var(--accent3);}
-.toast.t-err .toast-icon{color:#f87171;}
-footer{text-align:center;padding:28px;border-top:1px solid var(--border);font-size:12px;color:var(--muted);position:relative;z-index:1;}
-footer span{color:var(--accent);}
+
+.mt-2 { margin-top: 1rem; }
+.row-gap { display: flex; flex-wrap: wrap; align-items: center; gap: 0.8rem; }
+
 @media(max-width:640px){
   .inputs-row{flex-direction:column;}
   .sim-btns{flex-direction:column;}
@@ -365,15 +399,15 @@ footer span{color:var(--accent);}
 </style>
 </head>
 <body>
- 
+
 <header>
   <div class="hdr">
     <div class="hdr-left">
       <div class="college-badge">
         <img src="https://raw.githubusercontent.com/dineshkute90/virtual_lab_LAUC/main/pccoe.png"
-             onerror="this.src='https://placehold.co/48x48/111827/38bdf8?text=P'" alt="PCCoE">
+             onerror="this.src='https://placehold.co/48x48/f1f5fb/2563eb?text=P'" alt="PCCoE">
         <div class="ct">
-          <strong>Applied Sciences &amp; Humanities</strong>
+          <strong>Department of Electronics &amp; Telecommunication</strong>
           <span>Pimpri Chinchwad College of Engineering</span>
         </div>
       </div>
@@ -385,15 +419,15 @@ footer span{color:var(--accent);}
     <div class="chip"><i class="fas fa-user-circle"></i> Learner</div>
   </div>
 </header>
- 
+
 <div class="wrap">
- 
+
   <!-- DASHBOARD -->
   <div id="main-dashboard">
     <div id="dashboard-hero">
-      <div class="eyebrow"><i class="fas fa-atom"></i> Engineering Mathematics — Unit III</div>
-      <h2>Partial Differentiation<br><span class="hl">Variable as Constant</span></h2>
-      <p>Interactive virtual lab covering theory, simulation, and assessments for partial derivatives.</p>
+      <div class="eyebrow"><i class="fas fa-wave-square"></i> Signals &amp; Systems — Virtual Lab</div>
+      <h2>Signals &amp; Systems<br><span class="hl">Waveforms &amp; Operations</span></h2>
+      <p>Interactive virtual lab for signal generation, continuous/discrete analysis, and basic signal operations.</p>
     </div>
     <div class="card-grid">
       <div class="nav-card" data-target="page-aim">
@@ -410,7 +444,7 @@ footer span{color:var(--accent);}
       </div>
       <div class="nav-card" data-target="page-simulation">
         <div class="icon ic-sim"><i class="fas fa-desktop"></i></div>
-        <h3>Simulation</h3><p>Live Calculator</p>
+        <h3>Simulation</h3><p>Live Signal Lab</p>
       </div>
       <div class="nav-card" data-target="page-posttest">
         <div class="icon ic-post"><i class="fas fa-clipboard-check"></i></div>
@@ -430,7 +464,7 @@ footer span{color:var(--accent);}
       </div>
     </div>
   </div>
- 
+
   <!-- AIM -->
   <div id="page-aim" class="page">
     <button class="back-btn" onclick="goBack()"><i class="fas fa-arrow-left"></i> Dashboard</button>
@@ -440,55 +474,61 @@ footer span{color:var(--accent);}
     </div>
     <div class="content-box">
       <h4>Objective</h4>
-      <p>To understand and apply the fundamental principle of <strong style="color:var(--accent)">partial differentiation</strong> — treating all other variables as constants while differentiating with respect to one variable.</p>
+      <p>To understand, generate, and manipulate <strong style="color:var(--accent)">continuous-time and discrete-time signals</strong> — including sinusoidal, exponential, ramp, unit step, and unit impulse signals — and to apply basic signal operations such as amplitude scaling, addition, subtraction, multiplication, time scaling, time reversal, and time shifting.</p>
       <br>
       <h4>Learning Outcomes</h4>
       <ul>
-        <li>Understand the concept of "treating a variable as constant" in partial differentiation.</li>
-        <li>Compute partial derivatives ∂f/∂x and ∂f/∂y for multivariable functions.</li>
-        <li>Use the interactive simulator to verify manual calculations.</li>
+        <li>Generate standard continuous and discrete waveforms graphically.</li>
+        <li>Understand the difference between continuous-time and discrete-time representations.</li>
+        <li>Apply amplitude operations: scaling, addition, subtraction, multiplication.</li>
+        <li>Apply time operations: scaling, reversal, delay, and advance.</li>
+        <li>Observe and interpret the resulting waveform changes visually.</li>
         <li>Evaluate understanding via pretest and posttest assessments.</li>
-        <li>Apply partial differentiation to standard engineering problems.</li>
       </ul>
       <br>
       <h4>Apparatus</h4>
       <p>This virtual lab requires only a web browser. No physical setup is needed.</p>
     </div>
   </div>
- 
+
   <!-- THEORY -->
   <div id="page-theory" class="page">
     <button class="back-btn" onclick="goBack()"><i class="fas fa-arrow-left"></i> Dashboard</button>
     <div class="page-hdr">
       <div class="ph-icon ic-theory"><i class="fas fa-book"></i></div>
-      <div><h2>Theory</h2><p>Variable as a Constant — Key Principles</p></div>
+      <div><h2>Theory</h2><p>Signals &amp; Operations — Key Principles</p></div>
     </div>
     <div class="content-box">
-      <h4>What is Partial Differentiation?</h4>
-      <p>For a function of multiple variables <strong>f(x, y)</strong>, the <em>partial derivative</em> with respect to x is found by treating y as a fixed constant and differentiating normally with respect to x.</p>
+      <h4>What is a Signal?</h4>
+      <p>A <strong>signal</strong> is a function of one or more independent variables (typically time) that conveys information about the behaviour of a physical system. Signals can be <em>continuous-time</em> (defined for every instant) or <em>discrete-time</em> (defined only at integer sample points).</p>
       <div class="formula-block">
-∂f/∂x  →  differentiate w.r.t. x, keep y constant<br>
-∂f/∂y  →  differentiate w.r.t. y, keep x constant
+x(t)  →  continuous-time signal<br>
+x[n]  →  discrete-time signal (n ∈ ℤ)
       </div>
-      <h4>Worked Example</h4>
-      <p>Let <strong>f(x, y) = x²y + 2xy²</strong></p>
-      <div class="formula-block">
-∂f/∂x = 2xy + 2y²  &nbsp; (y treated as constant)<br>
-∂f/∂y = x² + 4xy   &nbsp; (x treated as constant)
-      </div>
-      <h4>Rules Applied</h4>
+      <h4>Standard Test Signals</h4>
       <ul>
-        <li><strong>Power rule:</strong> ∂(xⁿ)/∂x = nxⁿ⁻¹</li>
-        <li><strong>Constant rule:</strong> ∂(c)/∂x = 0</li>
-        <li><strong>Product rule:</strong> when both x and y appear in a term, use standard product rule keeping the other variable constant.</li>
-        <li><strong>Chain rule:</strong> ∂/∂x [f(g(x,y))] = f'(g) · ∂g/∂x</li>
+        <li><strong>Sinusoidal:</strong> x(t) = A · sin(2π f t + φ)</li>
+        <li><strong>Exponential:</strong> x(t) = A · e^(−a t) (decaying for a > 0)</li>
+        <li><strong>Ramp:</strong> x(t) = A · t · u(t)</li>
+        <li><strong>Unit Step:</strong> u(t) = 1 for t ≥ 0, 0 otherwise</li>
+        <li><strong>Unit Impulse:</strong> δ(t) = 1 at t = 0, 0 elsewhere (idealized)</li>
       </ul>
-      <br>
-      <h4>Notation</h4>
-      <p>Partial derivatives are written as <code style="background:var(--surface2);padding:2px 8px;border-radius:6px;">∂f/∂x</code> or <code style="background:var(--surface2);padding:2px 8px;border-radius:6px;">fₓ</code>. The symbol ∂ (curly d / del) distinguishes partial from ordinary derivatives.</p>
+      <h4>Basic Operations on Signals</h4>
+      <div class="formula-block">
+Amplitude Scaling: y(t) = k · x(t)<br>
+Addition:        y(t) = x₁(t) + x₂(t)<br>
+Subtraction:     y(t) = x₁(t) − x₂(t)<br>
+Multiplication:  y(t) = x₁(t) · x₂(t)<br>
+Time Scaling:    y(t) = x(a·t)<br>
+Time Reversal:   y(t) = x(−t)<br>
+Time Delay:      y(t) = x(t − t₀)   (t₀ > 0)<br>
+Time Advance:    y(t) = x(t + t₀)   (t₀ > 0)
+      </div>
+      <h4>Key Insight</h4>
+      <p>Amplitude operations affect the <strong>vertical axis</strong> (y-values) only, while time operations affect the <strong>horizontal axis</strong> (x-values) only. Time reversal mirrors the signal about the vertical axis; time delay shifts the signal to the <strong>right</strong>; time advance shifts it to the <strong>left</strong>.</p>
     </div>
   </div>
- 
+
   <!-- PRETEST -->
   <div id="page-pretest" class="page">
     <button class="back-btn" onclick="goBack()"><i class="fas fa-arrow-left"></i> Dashboard</button>
@@ -498,38 +538,38 @@ footer span{color:var(--accent);}
     </div>
     <div class="mcq-set" id="pretest-form">
       <div class="mcq-q" data-q="pre1" data-ans="a">
-        <div class="q-text"><span class="q-num">Q1</span> In partial derivative ∂f/∂x, all other variables are treated as:</div>
+        <div class="q-text"><span class="q-num">Q1</span> A continuous-time signal is defined:</div>
         <div class="opts">
-          <div class="opt"><input type="radio" name="pre1" id="pre1a" value="a"><label for="pre1a">Constants</label></div>
-          <div class="opt"><input type="radio" name="pre1" id="pre1b" value="b"><label for="pre1b">Variables (same as usual)</label></div>
+          <div class="opt"><input type="radio" name="pre1" id="pre1a" value="a"><label for="pre1a">For every instant of time</label></div>
+          <div class="opt"><input type="radio" name="pre1" id="pre1b" value="b"><label for="pre1b">Only at integer sample points</label></div>
         </div>
       </div>
       <div class="mcq-q" data-q="pre2" data-ans="a">
-        <div class="q-text"><span class="q-num">Q2</span> ∂(x³y) / ∂x = ?</div>
+        <div class="q-text"><span class="q-num">Q2</span> The unit step function u(t) equals 1 for:</div>
         <div class="opts">
-          <div class="opt"><input type="radio" name="pre2" id="pre2a" value="a"><label for="pre2a">3x²y</label></div>
-          <div class="opt"><input type="radio" name="pre2" id="pre2b" value="b"><label for="pre2b">x³</label></div>
+          <div class="opt"><input type="radio" name="pre2" id="pre2a" value="a"><label for="pre2a">t ≥ 0</label></div>
+          <div class="opt"><input type="radio" name="pre2" id="pre2b" value="b"><label for="pre2b">t > 1</label></div>
         </div>
       </div>
       <div class="mcq-q" data-q="pre3" data-ans="a">
-        <div class="q-text"><span class="q-num">Q3</span> ∂(x²y³) / ∂y = ?</div>
+        <div class="q-text"><span class="q-num">Q3</span> The operation y(t) = x(t − t₀) with t₀ > 0 represents:</div>
         <div class="opts">
-          <div class="opt"><input type="radio" name="pre3" id="pre3a" value="a"><label for="pre3a">3x²y²</label></div>
-          <div class="opt"><input type="radio" name="pre3" id="pre3b" value="b"><label for="pre3b">2xy³</label></div>
+          <div class="opt"><input type="radio" name="pre3" id="pre3a" value="a"><label for="pre3a">Time delay (shift right)</label></div>
+          <div class="opt"><input type="radio" name="pre3" id="pre3b" value="b"><label for="pre3b">Time advance (shift left)</label></div>
         </div>
       </div>
       <div class="mcq-q" data-q="pre4" data-ans="a">
-        <div class="q-text"><span class="q-num">Q4</span> If f(x,y) = 5x + 2y, then ∂f/∂x = ?</div>
+        <div class="q-text"><span class="q-num">Q4</span> Amplitude scaling of a signal affects the:</div>
         <div class="opts">
-          <div class="opt"><input type="radio" name="pre4" id="pre4a" value="a"><label for="pre4a">5</label></div>
-          <div class="opt"><input type="radio" name="pre4" id="pre4b" value="b"><label for="pre4b">2</label></div>
+          <div class="opt"><input type="radio" name="pre4" id="pre4a" value="a"><label for="pre4a">Vertical axis (amplitude)</label></div>
+          <div class="opt"><input type="radio" name="pre4" id="pre4b" value="b"><label for="pre4b">Horizontal axis (time)</label></div>
         </div>
       </div>
       <div class="mcq-q" data-q="pre5" data-ans="a">
-        <div class="q-text"><span class="q-num">Q5</span> ∂/∂y (e^{xy}) = ?</div>
+        <div class="q-text"><span class="q-num">Q5</span> The expression y(t) = x(−t) represents:</div>
         <div class="opts">
-          <div class="opt"><input type="radio" name="pre5" id="pre5a" value="a"><label for="pre5a">x · e^{xy}</label></div>
-          <div class="opt"><input type="radio" name="pre5" id="pre5b" value="b"><label for="pre5b">y · e^{xy}</label></div>
+          <div class="opt"><input type="radio" name="pre5" id="pre5a" value="a"><label for="pre5a">Time reversal</label></div>
+          <div class="opt"><input type="radio" name="pre5" id="pre5b" value="b"><label for="pre5b">Time scaling</label></div>
         </div>
       </div>
     </div>
@@ -546,108 +586,136 @@ footer span{color:var(--accent);}
       <div class="progress-bar"><div class="progress-fill" id="pretestFill" style="width:0%"></div></div>
     </div>
   </div>
- 
+
   <!-- SIMULATION -->
   <div id="page-simulation" class="page">
     <button class="back-btn" onclick="goBack()"><i class="fas fa-arrow-left"></i> Dashboard</button>
     <div class="page-hdr">
       <div class="ph-icon ic-sim"><i class="fas fa-desktop"></i></div>
-      <div><h2>Partial Derivative Simulator</h2><p>Shows symbolic expression AND numerical value for ∂f/∂x and ∂f/∂y</p></div>
+      <div><h2>Signal &amp; Operations Simulator</h2><p>Generate waveforms and apply basic signal operations graphically</p></div>
     </div>
+
     <div class="sim-panel">
- 
-      <!-- Function input -->
+
+      <!-- ========== PART 1: WAVEFORM GENERATOR ========== -->
       <div class="func-card" style="text-align:left;">
-        <div class="label" style="margin-bottom:10px;">Enter f(x, y)</div>
-        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
-          <span style="font-family:'Space Mono',monospace;font-size:1.1rem;color:var(--accent3);white-space:nowrap;">f(x, y) =</span>
-          <input type="text" id="funcInput"
-            value="x^2*y + 2*x*y^2"
-            placeholder="e.g. x^2*y + sin(x*y) + exp(x)"
-            style="flex:1;min-width:200px;padding:12px 16px;background:var(--surface2);
-                   border:1px solid var(--border);border-radius:12px;color:var(--accent3);
-                   font-family:'Space Mono',monospace;font-size:1rem;transition:.2s;">
-          <button class="sim-btn sim-btn-x" id="btnLoadFunc" style="flex:0;min-width:auto;padding:12px 20px;white-space:nowrap;">
-            <i class="fas fa-check"></i> Load
-          </button>
-        </div>
-        <div id="funcError" style="color:#f87171;font-size:12px;margin-top:8px;display:none;"></div>
-        <div id="funcPreview" style="margin-top:10px;font-size:13px;color:var(--muted);">
-          Supported: <code style="background:var(--surface2);padding:1px 6px;border-radius:4px;">+  -  *  /  ^  sin  cos  tan  log  ln  exp  sqrt  abs  pi  e</code>
-        </div>
-      </div>
- 
-      <!-- Loaded function display -->
-      <div class="func-card" id="funcDisplay">
-        <div class="label">Loaded Function</div>
-        <div class="func-display" id="funcDisplayText">
-          f(<span class="var">x</span>, <span class="var">y</span>) = <span style="color:var(--text)">x^2*y + 2*x*y^2</span>
-        </div>
-      </div>
- 
-      <!-- x, y values -->
-      <div class="inputs-row">
-        <div class="inp-group">
-          <label><i class="fas fa-x"></i> &nbsp;Value of x</label>
-          <input type="number" id="simX" value="2" step="0.5" placeholder="e.g. 2">
-        </div>
-        <div class="inp-group">
-          <label><i class="fas fa-y"></i> &nbsp;Value of y</label>
-          <input type="number" id="simY" value="3" step="0.5" placeholder="e.g. 3">
-        </div>
-      </div>
- 
-      <div class="sim-btns">
-        <button class="sim-btn sim-btn-x" id="btnPartialX">
-          <i class="fas fa-calculator"></i> Compute ∂f/∂x &nbsp;<small>(y constant)</small>
-        </button>
-        <button class="sim-btn sim-btn-y" id="btnPartialY">
-          <i class="fas fa-calculator"></i> Compute ∂f/∂y &nbsp;<small>(x constant)</small>
-        </button>
-      </div>
- 
-      <!-- Result Card with dual panel -->
-      <div class="result-card" id="simResult">
-        <div class="r-label"><i class="fas fa-chart-line"></i> &nbsp;Result</div>
-        <div id="resultIdle" class="idle-state">
-          <i class="fas fa-infinity"></i>
-          Load a function and click Compute to see both symbolic and numerical results
-        </div>
-        <div id="resultContent" style="display:none;">
-          <div class="dual-result">
-            <!-- Symbolic panel -->
-            <div class="result-panel sym-panel">
-              <div class="rp-tag"><span class="dot"></span> Symbolic (Algebraic)</div>
-              <div class="sym-value" id="symValue">—</div>
-            </div>
-            <!-- Numerical panel -->
-            <div class="result-panel num-panel">
-              <div class="rp-tag"><span class="dot"></span> Numerical (at x, y)</div>
-              <div class="num-value" id="numValue">—</div>
-              <div class="num-sub" id="numSub"></div>
-            </div>
+        <div class="label" style="margin-bottom:12px;"><i class="fas fa-chart-line"></i> &nbsp;1. Waveform Generator</div>
+        
+        <div style="display:flex;gap:16px;flex-wrap:wrap;align-items:center;margin-bottom:16px;">
+          <div class="radio-group">
+            <label><input type="radio" name="genMode" value="continuous" checked> Continuous</label>
+            <label><input type="radio" name="genMode" value="discrete"> Discrete</label>
           </div>
-          <div class="result-formula" id="resultFormula"></div>
-          <div class="result-steps" id="resultSteps"></div>
+          <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+            <label style="font-size:12px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.06em;">Signal:</label>
+            <select id="genSignalType" style="padding:10px 16px;background:var(--surface);border:1px solid var(--border);border-radius:12px;color:var(--text);font-size:14px;font-family:'Sora',sans-serif;cursor:pointer;">
+              <option value="sinusoidal">Sinusoidal</option>
+              <option value="exponential">Exponential</option>
+              <option value="ramp">Ramp</option>
+              <option value="unitstep">Unit Step</option>
+              <option value="unitimpulse">Unit Impulse</option>
+            </select>
+          </div>
         </div>
-      </div>
- 
-      <!-- Quick examples -->
-      <div style="margin-top:8px;">
-        <div style="font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:10px;">Quick Examples</div>
-        <div style="display:flex;flex-wrap:wrap;gap:8px;" id="exampleBtns">
-          <button class="btn btn-secondary" style="font-size:12px;padding:6px 14px;" data-fn="x^2*y + 2*x*y^2">x²y + 2xy²</button>
-          <button class="btn btn-secondary" style="font-size:12px;padding:6px 14px;" data-fn="sin(x*y)">sin(xy)</button>
-          <button class="btn btn-secondary" style="font-size:12px;padding:6px 14px;" data-fn="exp(x*y)">e^(xy)</button>
-          <button class="btn btn-secondary" style="font-size:12px;padding:6px 14px;" data-fn="x^3 + y^3 - 3*x*y">x³+y³−3xy</button>
-          <button class="btn btn-secondary" style="font-size:12px;padding:6px 14px;" data-fn="log(x^2 + y^2)">ln(x²+y²)</button>
-          <button class="btn btn-secondary" style="font-size:12px;padding:6px 14px;" data-fn="x*cos(y) + y*sin(x)">x·cos(y)+y·sin(x)</button>
-          <button class="btn btn-secondary" style="font-size:12px;padding:6px 14px;" data-fn="sqrt(x^2 + y^2)">√(x²+y²)</button>
+
+        <div class="inputs-row" style="margin-bottom:16px;">
+          <div class="inp-group">
+            <label>Amp (A)</label>
+            <input type="number" id="genAmp" value="1" step="0.1">
+          </div>
+          <div class="inp-group">
+            <label>Freq / rate</label>
+            <input type="number" id="genFreq" value="1" step="0.1">
+          </div>
+          <div class="inp-group">
+            <label>Shift</label>
+            <input type="number" id="genShift" value="0" step="0.1">
+          </div>
+          <div class="inp-group">
+            <label>t start</label>
+            <input type="number" id="genTstart" value="-2" step="0.5">
+          </div>
+          <div class="inp-group">
+            <label>t end</label>
+            <input type="number" id="genTend" value="2" step="0.5">
+          </div>
         </div>
+
+        <div class="sim-btns">
+          <button class="sim-btn sim-btn-g" id="generateBtn"><i class="fas fa-play"></i> Generate &amp; Plot</button>
+        </div>
+
+        <div class="chart-container">
+          <canvas id="genChart"></canvas>
+        </div>
+        <div class="chart-hint"><i class="fas fa-search-plus"></i> Scroll to zoom · Drag to pan · Double-click to reset</div>
+        <div class="result-formula" id="genInfo" style="margin-top:12px;background:var(--surface2);padding:10px 14px;border-radius:10px;font-family:'Space Mono',monospace;font-size:12px;color:var(--muted);">Sinusoid: A·sin(2π f t + φ)</div>
       </div>
+
+      <!-- ========== PART 2: BASIC OPERATIONS ========== -->
+      <div class="func-card" style="text-align:left;">
+        <div class="label" style="margin-bottom:12px;"><i class="fas fa-cogs"></i> &nbsp;2. Basic Operations on Signals</div>
+
+        <div style="display:flex;gap:16px;flex-wrap:wrap;align-items:center;margin-bottom:16px;">
+          <div class="radio-group">
+            <label><input type="radio" name="opMode" value="continuous" checked> Continuous</label>
+            <label><input type="radio" name="opMode" value="discrete"> Discrete</label>
+          </div>
+        </div>
+
+        <div class="inputs-row" style="margin-bottom:16px;">
+          <div class="inp-group">
+            <label>Base signal</label>
+            <select id="opBaseSignal" style="width:100%;padding:12px 16px;background:var(--surface2);border:1px solid var(--border);border-radius:12px;color:var(--text);font-size:14px;font-family:'Sora',sans-serif;">
+              <option value="sinusoidal">Sinusoidal</option>
+              <option value="exponential">Exponential</option>
+              <option value="ramp">Ramp</option>
+              <option value="unitstep">Unit Step</option>
+            </select>
+          </div>
+          <div class="inp-group">
+            <label>Amp</label>
+            <input type="number" id="opAmp" value="1" step="0.1">
+          </div>
+          <div class="inp-group">
+            <label>Freq / rate</label>
+            <input type="number" id="opFreq" value="1" step="0.1">
+          </div>
+          <div class="inp-group">
+            <label>Shift</label>
+            <input type="number" id="opShift" value="0" step="0.1">
+          </div>
+        </div>
+
+        <div style="font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:10px;">Operation</div>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;" id="opButtons">
+          <button class="op-btn" data-op="amplitude">Amplitude scaling</button>
+          <button class="op-btn" data-op="addition">Addition</button>
+          <button class="op-btn" data-op="subtraction">Subtraction</button>
+          <button class="op-btn" data-op="multiplication">Multiplication</button>
+          <button class="op-btn" data-op="timescale">Time scaling</button>
+          <button class="op-btn" data-op="timereversal">Time reversal</button>
+          <button class="op-btn" data-op="timedelay">Time delay</button>
+          <button class="op-btn" data-op="timeadvance">Time advance</button>
+        </div>
+
+        <div id="opExtraParams" class="row-gap" style="margin-bottom:16px;"></div>
+
+        <div class="sim-btns" style="margin-bottom:16px;">
+          <button class="sim-btn sim-btn-x" id="applyOpBtn"><i class="fas fa-calculator"></i> Apply Operation</button>
+          <button class="sim-btn sim-btn-y" id="resetOpBtn"><i class="fas fa-undo"></i> Reset Base</button>
+        </div>
+
+        <div class="chart-container">
+          <canvas id="opChart"></canvas>
+        </div>
+        <div class="chart-hint"><i class="fas fa-search-plus"></i> Scroll to zoom · Drag to pan · Double-click to reset</div>
+        <div class="result-formula" id="opInfo" style="margin-top:12px;background:var(--surface2);padding:10px 14px;border-radius:10px;font-family:'Space Mono',monospace;font-size:12px;color:var(--muted);">Base signal plotted. Choose operation and parameters.</div>
+      </div>
+
     </div>
   </div>
- 
+
   <!-- POSTTEST -->
   <div id="page-posttest" class="page">
     <button class="back-btn" onclick="goBack()"><i class="fas fa-arrow-left"></i> Dashboard</button>
@@ -657,38 +725,38 @@ footer span{color:var(--accent);}
     </div>
     <div class="mcq-set" id="posttest-form">
       <div class="mcq-q" data-q="post1" data-ans="a">
-        <div class="q-text"><span class="q-num">Q1</span> ∂(3x²y² + 4xy³) / ∂x = ?</div>
+        <div class="q-text"><span class="q-num">Q1</span> If x(t) is a continuous signal, then x(2t) represents:</div>
         <div class="opts">
-          <div class="opt"><input type="radio" name="post1" id="post1a" value="a"><label for="post1a">6xy² + 4y³</label></div>
-          <div class="opt"><input type="radio" name="post1" id="post1b" value="b"><label for="post1b">6x²y + 12xy²</label></div>
+          <div class="opt"><input type="radio" name="post1" id="post1a" value="a"><label for="post1a">Time compression (scaling by 1/2)</label></div>
+          <div class="opt"><input type="radio" name="post1" id="post1b" value="b"><label for="post1b">Time expansion (scaling by 2)</label></div>
         </div>
       </div>
       <div class="mcq-q" data-q="post2" data-ans="a">
-        <div class="q-text"><span class="q-num">Q2</span> ∂(3x²y² + 4xy³) / ∂y = ?</div>
+        <div class="q-text"><span class="q-num">Q2</span> y(t) = x(t + 3) shifts the signal:</div>
         <div class="opts">
-          <div class="opt"><input type="radio" name="post2" id="post2a" value="a"><label for="post2a">6x²y + 12xy²</label></div>
-          <div class="opt"><input type="radio" name="post2" id="post2b" value="b"><label for="post2b">6xy² + 4y³</label></div>
+          <div class="opt"><input type="radio" name="post2" id="post2a" value="a"><label for="post2a">3 units to the left (advance)</label></div>
+          <div class="opt"><input type="radio" name="post2" id="post2b" value="b"><label for="post2b">3 units to the right (delay)</label></div>
         </div>
       </div>
       <div class="mcq-q" data-q="post3" data-ans="a">
-        <div class="q-text"><span class="q-num">Q3</span> If z = x·ln(y), then ∂z/∂x (treat y constant) = ?</div>
+        <div class="q-text"><span class="q-num">Q3</span> The discrete-time unit impulse δ[n] is 1 at:</div>
         <div class="opts">
-          <div class="opt"><input type="radio" name="post3" id="post3a" value="a"><label for="post3a">ln(y)</label></div>
-          <div class="opt"><input type="radio" name="post3" id="post3b" value="b"><label for="post3b">x/y</label></div>
+          <div class="opt"><input type="radio" name="post3" id="post3a" value="a"><label for="post3a">n = 0 only</label></div>
+          <div class="opt"><input type="radio" name="post3" id="post3b" value="b"><label for="post3b">all n ≥ 0</label></div>
         </div>
       </div>
       <div class="mcq-q" data-q="post4" data-ans="a">
-        <div class="q-text"><span class="q-num">Q4</span> For f(x,y) = sin(xy), ∂f/∂y = ?</div>
+        <div class="q-text"><span class="q-num">Q4</span> If y(t) = x₁(t) · x₂(t), the operation is:</div>
         <div class="opts">
-          <div class="opt"><input type="radio" name="post4" id="post4a" value="a"><label for="post4a">x · cos(xy)</label></div>
-          <div class="opt"><input type="radio" name="post4" id="post4b" value="b"><label for="post4b">y · cos(xy)</label></div>
+          <div class="opt"><input type="radio" name="post4" id="post4a" value="a"><label for="post4a">Multiplication of signals</label></div>
+          <div class="opt"><input type="radio" name="post4" id="post4b" value="b"><label for="post4b">Addition of signals</label></div>
         </div>
       </div>
       <div class="mcq-q" data-q="post5" data-ans="a">
-        <div class="q-text"><span class="q-num">Q5</span> The "treat variable as constant" principle applies to:</div>
+        <div class="q-text"><span class="q-num">Q5</span> A discrete-time signal is defined:</div>
         <div class="opts">
-          <div class="opt"><input type="radio" name="post5" id="post5a" value="a"><label for="post5a">Partial derivatives only</label></div>
-          <div class="opt"><input type="radio" name="post5" id="post5b" value="b"><label for="post5b">Ordinary derivatives</label></div>
+          <div class="opt"><input type="radio" name="post5" id="post5a" value="a"><label for="post5a">Only at integer values of time</label></div>
+          <div class="opt"><input type="radio" name="post5" id="post5b" value="b"><label for="post5b">For all real values of time</label></div>
         </div>
       </div>
     </div>
@@ -722,7 +790,7 @@ footer span{color:var(--accent);}
       </div>
     </div>
   </div>
- 
+
   <!-- REFERENCES -->
   <div id="page-references" class="page">
     <button class="back-btn" onclick="goBack()"><i class="fas fa-arrow-left"></i> Dashboard</button>
@@ -731,29 +799,49 @@ footer span{color:var(--accent);}
       <div><h2>References</h2><p>Study resources &amp; further reading</p></div>
     </div>
     <div class="ref-list">
-      <div class="ref-item"><div class="ref-icon"><i class="fas fa-book"></i></div><div><div class="ref-title">Higher Engineering Mathematics</div><div class="ref-sub">B.S. Grewal — Chapter on Partial Differentiation</div></div></div>
-      <div class="ref-item"><div class="ref-icon"><i class="fas fa-globe"></i></div><div><div class="ref-title">NPTEL: Partial Differentiation</div><div class="ref-sub">National Programme on Technology Enhanced Learning — IIT/IISc</div></div></div>
-      <div class="ref-item"><div class="ref-icon"><i class="fas fa-book"></i></div><div><div class="ref-title">Advanced Engineering Mathematics</div><div class="ref-sub">Erwin Kreyszig — Chapters on Calculus of Several Variables</div></div></div>
-      <div class="ref-item"><div class="ref-icon"><i class="fas fa-video"></i></div><div><div class="ref-title">Khan Academy — Multivariable Calculus</div><div class="ref-sub">Free video lectures on partial derivatives (khanacademy.org)</div></div></div>
-      <div class="ref-item"><div class="ref-icon"><i class="fas fa-university"></i></div><div><div class="ref-title">MIT OpenCourseWare — 18.02 Multivariable Calculus</div><div class="ref-sub">Lecture notes and problem sets (ocw.mit.edu)</div></div></div>
+      <div class="ref-item"><div class="ref-icon"><i class="fas fa-book"></i></div><div><div class="ref-title">Signals and Systems</div><div class="ref-sub">Alan V. Oppenheim, Alan S. Willsky — Pearson</div></div></div>
+      <div class="ref-item"><div class="ref-icon"><i class="fas fa-globe"></i></div><div><div class="ref-title">NPTEL: Signals and Systems</div><div class="ref-sub">National Programme on Technology Enhanced Learning — IIT/IISc</div></div></div>
+      <div class="ref-item"><div class="ref-icon"><i class="fas fa-book"></i></div><div><div class="ref-title">Signals and Systems</div><div class="ref-sub">Simon Haykin, Barry Van Veen — Wiley</div></div></div>
+      <div class="ref-item"><div class="ref-icon"><i class="fas fa-video"></i></div><div><div class="ref-title">Khan Academy — Signals and Systems</div><div class="ref-sub">Free video lectures (khanacademy.org)</div></div></div>
+      <div class="ref-item"><div class="ref-icon"><i class="fas fa-university"></i></div><div><div class="ref-title">MIT OpenCourseWare — 6.003 Signals and Systems</div><div class="ref-sub">Lecture notes and problem sets (ocw.mit.edu)</div></div></div>
     </div>
   </div>
- 
-  <!-- CONTRIBUTORS -->
+
+  <!-- CONTRIBUTORS (UPDATED) -->
   <div id="page-contributors" class="page">
     <button class="back-btn" onclick="goBack()"><i class="fas fa-arrow-left"></i> Dashboard</button>
     <div class="page-hdr">
       <div class="ph-icon ic-cont"><i class="fas fa-users"></i></div>
-      <div><h2>Contributors</h2><p>The team behind this virtual lab</p></div>
+      <div><h2>Contributors</h2><p>The team behind this Virtual Lab</p></div>
     </div>
     <div class="contrib-grid">
-      <div class="contrib-card"><div class="contrib-avatar ic-theory"><i class="fas fa-chalkboard-teacher"></i></div><h4>Mr. Ganesh Tarte</h4><p>Subject Expert &amp; Mentor</p><div class="roll">Mathematics Dept.</div></div>
-      <div class="contrib-card"><div class="contrib-avatar ic-sim"><i class="fas fa-laptop-code"></i></div><h4>Shantanu Kadam</h4><p>Frontend &amp; Simulation Lead</p><div class="roll">125B1E069</div></div>
-      <div class="contrib-card"><div class="contrib-avatar ic-aim"><i class="fas fa-code"></i></div><h4>Shikhar Jaiswal</h4><p>Developer &amp; Integration</p><div class="roll">125B1E068</div></div>
-      <div class="contrib-card"><div class="contrib-avatar ic-feed"><i class="fas fa-flask"></i></div><h4>Virtual Lab Team</h4><p>PCCoE — LAUC</p><div class="roll">Applied Sciences</div></div>
+      <div class="contrib-card">
+        <div class="contrib-avatar ic-theory"><i class="fas fa-chalkboard-teacher"></i></div>
+        <h4>Mrs. V. A. Kulkarni</h4>
+        <p>Subject Expert &amp; Mentor</p>
+        <div class="roll">Department of Digital Signal Processing</div>
+      </div>
+      <div class="contrib-card">
+        <div class="contrib-avatar ic-sim"><i class="fas fa-laptop-code"></i></div>
+        <h4>Shikhar Jaiswal</h4>
+        <p>Frontend &amp; Simulation Lead</p>
+        <div class="roll">125B1E068</div>
+      </div>
+      <div class="contrib-card">
+        <div class="contrib-avatar ic-aim"><i class="fas fa-code"></i></div>
+        <h4>Shantanu Kadam</h4>
+        <p>Developer &amp; Integration</p>
+        <div class="roll">125B1E069</div>
+      </div>
+      <div class="contrib-card">
+        <div class="contrib-avatar ic-feed"><i class="fas fa-flask"></i></div>
+        <h4>Virtual Lab Team</h4>
+        <p>PCCoE — Signal &amp; System</p>
+        <div class="roll">Department of ENTC</div>
+      </div>
     </div>
   </div>
- 
+
   <!-- FEEDBACK -->
   <div id="page-feedback" class="page">
     <button class="back-btn" onclick="goBack()"><i class="fas fa-arrow-left"></i> Dashboard</button>
@@ -778,19 +866,19 @@ footer span{color:var(--accent);}
       </button>
     </div>
   </div>
- 
+
 </div>
- 
+
 <footer>
-  <p>© 2025 <span>Virtual Labs</span> · Applied Sciences &amp; Humanities · Pimpri Chinchwad College of Engineering<br>
-  <small>Partial Differentiation — Variable as Constant</small></p>
+  <p>© 2026 <span>Virtual Labs</span> · Department of Electronics &amp; Telecommunication · Pimpri Chinchwad College of Engineering<br>
+  <small>Signals &amp; Systems — Waveforms &amp; Operations</small></p>
 </footer>
- 
+
 <div class="toast" id="toast">
   <i class="fas fa-check-circle toast-icon"></i>
   <span id="toastMsg">Done!</span>
 </div>
- 
+
 <script>
 // ── Navigation ──────────────────────────────────────────────
 function goBack(){
@@ -809,7 +897,7 @@ function openPage(id){
 document.querySelectorAll('.nav-card').forEach(c=>{
   c.addEventListener('click',()=>{ const t=c.getAttribute('data-target'); if(t) openPage(t); });
 });
- 
+
 // ── Toast ────────────────────────────────────────────────────
 function showToast(msg,type='ok'){
   const t=document.getElementById('toast');
@@ -820,453 +908,7 @@ function showToast(msg,type='ok'){
   t.classList.add('show');
   setTimeout(()=>t.classList.remove('show'),3000);
 }
- 
-// ══════════════════════════════════════════════════════════════
-// SYMBOLIC DIFFERENTIATION ENGINE
-// Parses the expression into an AST, differentiates symbolically,
-// then pretty-prints the result.
-// ══════════════════════════════════════════════════════════════
- 
-// ── Tokeniser ──
-function tokenise(expr){
-  const tokens=[];
-  let i=0;
-  while(i<expr.length){
-    const ch=expr[i];
-    if(/\s/.test(ch)){i++;continue;}
-    if(/\d/.test(ch)||ch==='.'){
-      let num='';
-      while(i<expr.length&&(/\d/.test(expr[i])||expr[i]==='.')){num+=expr[i++];}
-      tokens.push({type:'num',val:num});
-    } else if(/[a-zA-Z]/.test(ch)){
-      let word='';
-      while(i<expr.length&&/[a-zA-Z]/.test(expr[i])){word+=expr[i++];}
-      const fns=['sin','cos','tan','exp','sqrt','abs','log','ln'];
-      if(fns.includes(word)) tokens.push({type:'func',val:word});
-      else tokens.push({type:'var',val:word});
-    } else if('+-*/^()'.includes(ch)){
-      tokens.push({type:'op',val:ch});i++;
-    } else {i++;}
-  }
-  return tokens;
-}
- 
-// ── Recursive-descent parser → AST ──
-// Grammar:
-//   expr   = term (('+' | '-') term)*
-//   term   = unary (('*' | '/') unary)*
-//   unary  = '-' unary | power
-//   power  = atom ('^' unary)?          (right-assoc)
-//   atom   = num | var | func '(' expr ')' | '(' expr ')'
- 
-function parse(tokens){
-  let pos=0;
-  function peek(){ return tokens[pos]; }
-  function consume(){ return tokens[pos++]; }
- 
-  function expr(){
-    let node=term();
-    while(pos<tokens.length && peek().type==='op' && (peek().val==='+'||peek().val==='-')){
-      const op=consume().val;
-      const right=term();
-      node={type:'binop',op,left:node,right};
-    }
-    return node;
-  }
-  function term(){
-    let node=unary();
-    while(pos<tokens.length && peek().type==='op' && (peek().val==='*'||peek().val==='/')){
-      const op=consume().val;
-      const right=unary();
-      node={type:'binop',op,left:node,right};
-    }
-    return node;
-  }
-  function unary(){
-    if(pos<tokens.length && peek().type==='op' && peek().val==='-'){
-      consume();
-      const operand=unary();
-      // Simplify: -(-x) = x, -(num) = -num
-      if(operand.type==='num') return {type:'num',val:String(-Number(operand.val))};
-      return {type:'neg',operand};
-    }
-    return power();
-  }
-  function power(){
-    let node=atom();
-    if(pos<tokens.length && peek().type==='op' && peek().val==='^'){
-      consume();
-      const exp=unary(); // right-associative
-      node={type:'binop',op:'^',left:node,right:exp};
-    }
-    return node;
-  }
-  function atom(){
-    const t=peek();
-    if(!t) throw new Error('Unexpected end of expression');
-    if(t.type==='num'){ consume(); return {type:'num',val:t.val}; }
-    if(t.type==='func'){
-      consume();
-      if(!peek()||peek().val!=='(') throw new Error('Expected ( after '+t.val);
-      consume(); // (
-      const arg=expr();
-      if(!peek()||peek().val!==')') throw new Error('Expected ) after function arg');
-      consume(); // )
-      return {type:'func',name:t.val,arg};
-    }
-    if(t.type==='var'){
-      consume();
-      return {type:'var',name:t.val};
-    }
-    if(t.type==='op' && t.val==='('){
-      consume();
-      const node=expr();
-      if(!peek()||peek().val!==')') throw new Error('Expected )');
-      consume();
-      return node;
-    }
-    throw new Error('Unexpected token: '+t.val);
-  }
-  const tree=expr();
-  return tree;
-}
- 
-// ── Symbolic differentiation ──
-function diff(node, v){
-  if(!node) return num(0);
-  switch(node.type){
-    case 'num': return num(0);
-    case 'var': return {type:'num', val: node.name===v ? '1':'0'};
-    case 'neg': return neg(diff(node.operand, v));
-    case 'binop': {
-      const {op,left,right}=node;
-      if(op==='+') return add(diff(left,v), diff(right,v));
-      if(op==='-') return sub(diff(left,v), diff(right,v));
-      if(op==='*'){
-        // product rule: u'v + uv'
-        return add(mul(diff(left,v), right), mul(left, diff(right,v)));
-      }
-      if(op==='/'){
-        // quotient rule: (u'v - uv') / v^2
-        return div(sub(mul(diff(left,v),right), mul(left,diff(right,v))), pow(right,num(2)));
-      }
-      if(op==='^'){
-        // If exponent is constant: n*x^(n-1)*dx
-        if(!containsVar(right,v)){
-          const n=right;
-          return mul(mul(n, pow(left, sub(n, num(1)))), diff(left,v));
-        }
-        // If base is constant: a^u * ln(a) * du
-        if(!containsVar(left,v)){
-          return mul(mul(pow(left,right), func('ln',left)), diff(right,v));
-        }
-        // General: e^(right*ln(left)) via chain rule
-        // d/dv [u^w] = u^w * (w'*ln(u) + w*u'/u)
-        return mul(pow(left,right),
-          add(mul(diff(right,v), func('ln',left)),
-              mul(right, div(diff(left,v), left))));
-      }
-      break;
-    }
-    case 'func': {
-      const {name,arg}=node;
-      const da=diff(arg,v);
-      let dOuter;
-      if(name==='sin') dOuter=func('cos',arg);
-      else if(name==='cos') dOuter=neg(func('sin',arg));
-      else if(name==='tan') dOuter=div(num(1), pow(func('cos',arg),num(2)));
-      else if(name==='exp'||name==='e') dOuter=func('exp',arg);
-      else if(name==='log'||name==='ln') dOuter=div(num(1),arg);
-      else if(name==='sqrt') dOuter=div(num(1), mul(num(2), func('sqrt',arg)));
-      else if(name==='abs') dOuter=div(arg, func('abs',arg));
-      else dOuter=num(1); // fallback
-      return mul(dOuter, da);
-    }
-  }
-  return num(0);
-}
- 
-function containsVar(node, v){
-  if(!node) return false;
-  if(node.type==='var') return node.name===v;
-  if(node.type==='num') return false;
-  if(node.type==='neg') return containsVar(node.operand,v);
-  if(node.type==='binop') return containsVar(node.left,v)||containsVar(node.right,v);
-  if(node.type==='func') return containsVar(node.arg,v);
-  return false;
-}
- 
-// ── AST helpers ──
-function num(n){ return {type:'num',val:String(n)}; }
-function neg(a){ if(a.type==='num'&&a.val==='0') return num(0); return {type:'neg',operand:a}; }
-function add(a,b){
-  if(isZero(a)) return b; if(isZero(b)) return a;
-  return {type:'binop',op:'+',left:a,right:b};
-}
-function sub(a,b){
-  if(isZero(b)) return a; if(isZero(a)) return neg(b);
-  return {type:'binop',op:'-',left:a,right:b};
-}
-function mul(a,b){
-  if(isZero(a)||isZero(b)) return num(0);
-  if(isOne(a)) return b; if(isOne(b)) return a;
-  if(isNeg1(a)) return neg(b); if(isNeg1(b)) return neg(a);
-  return {type:'binop',op:'*',left:a,right:b};
-}
-function div(a,b){
-  if(isZero(a)) return num(0); if(isOne(b)) return a;
-  return {type:'binop',op:'/',left:a,right:b};
-}
-function pow(a,b){
-  if(isZero(b)) return num(1); if(isOne(b)) return a;
-  return {type:'binop',op:'^',left:a,right:b};
-}
-function func(name,arg){ return {type:'func',name,arg}; }
-function isZero(n){ return n.type==='num'&&(n.val==='0'||Number(n.val)===0); }
-function isOne(n){ return n.type==='num'&&Number(n.val)===1; }
-function isNeg1(n){ return n.type==='num'&&Number(n.val)===-1; }
- 
-// ── Pretty-print AST → string ──
-function prettyPrint(node, parentPrec=0){
-  if(!node) return '0';
-  switch(node.type){
-    case 'num': {
-      const v=Number(node.val);
-      // Display fractions nicely if integer
-      if(Number.isInteger(v)) return String(v);
-      // Round for display
-      return String(parseFloat(v.toFixed(4)));
-    }
-    case 'var': return node.name;
-    case 'neg': {
-      const inner=prettyPrint(node.operand,3);
-      const needP=(node.operand.type==='binop'&&['+','-'].includes(node.operand.op));
-      return needP ? `-(${inner})` : `-${inner}`;
-    }
-    case 'binop': {
-      const prec={'+':1,'-':1,'*':2,'/':2,'^':3};
-      const myP=prec[node.op]||0;
-      let l=prettyPrint(node.left, myP);
-      let r=prettyPrint(node.right, myP+(node.op==='^'?1:0));
-      // Wrap in parens if needed
-      const lNode=node.left;
-      const rNode=node.right;
-      if(lNode.type==='binop'&&prec[lNode.op]<myP) l=`(${l})`;
-      if(rNode.type==='binop'){
-        const rp=prec[rNode.op];
-        if(rp<myP||(rp===myP&&(node.op==='-'||node.op==='/'))) r=`(${r})`;
-      }
-      if(rNode.type==='neg') r=`(${r})`;
-      if(node.op==='*'){
-        // Check if we can use implicit multiply or coefficient display
-        const lIsNum=(lNode.type==='num');
-        const rIsVar=(rNode.type==='var');
-        const rIsPow=(rNode.type==='binop'&&rNode.op==='^');
-        const rIsFunc=(rNode.type==='func');
-        // e.g. 2*x → 2x, 2*x^2 → 2x², etc.
-        if(lIsNum && (rIsVar||rIsPow||rIsFunc)) return `${l}${r}`;
-      }
-      return `${l} ${node.op} ${r}`;
-    }
-    case 'func': {
-      const arg=prettyPrint(node.arg,0);
-      const name=node.name==='log'?'ln':node.name;
-      return `${name}(${arg})`;
-    }
-  }
-  return '?';
-}
- 
-// ── Numeric evaluator on AST ──
-function evalAST(node,x,y){
-  if(!node) return 0;
-  switch(node.type){
-    case 'num': return Number(node.val);
-    case 'var': if(node.name==='x') return x; if(node.name==='y') return y; if(node.name==='e') return Math.E; if(node.name==='pi') return Math.PI; return 0;
-    case 'neg': return -evalAST(node.operand,x,y);
-    case 'binop': {
-      const l=evalAST(node.left,x,y), r=evalAST(node.right,x,y);
-      if(node.op==='+') return l+r;
-      if(node.op==='-') return l-r;
-      if(node.op==='*') return l*r;
-      if(node.op==='/') return l/r;
-      if(node.op==='^') return Math.pow(l,r);
-      break;
-    }
-    case 'func': {
-      const a=evalAST(node.arg,x,y);
-      if(node.name==='sin') return Math.sin(a);
-      if(node.name==='cos') return Math.cos(a);
-      if(node.name==='tan') return Math.tan(a);
-      if(node.name==='exp') return Math.exp(a);
-      if(node.name==='log'||node.name==='ln') return Math.log(a);
-      if(node.name==='sqrt') return Math.sqrt(a);
-      if(node.name==='abs') return Math.abs(a);
-      break;
-    }
-  }
-  return NaN;
-}
- 
-// ── Compile a string → AST (with preprocessing) ──
-function parseExpr(expr){
-  let e=expr.trim();
-  // Handle implicit multiply: 2x → 2*x, )(x → )*(x etc.
-  e=e.replace(/(\d)([a-zA-Z(])/g,'$1*$2');
-  e=e.replace(/([a-zA-Z)])(\()/g,'$1*$2');
-  // restore function names: sin*(x) → sin(x)
-  const fns=['sin','cos','tan','exp','sqrt','abs','log','ln'];
-  fns.forEach(fn=>{
-    const re=new RegExp(`\\b${fn}\\*\\(`, 'g');
-    e=e.replace(re, `${fn}(`);
-  });
-  // pi, e as vars already handled in evalAST
-  const tokens=tokenise(e);
-  return parse(tokens);
-}
- 
-// ── Numeric central diff (backup check) ──
-let compiledFn=null;
-let currentAST=null;
-let currentFnStr='x^2*y + 2*x*y^2';
- 
-function compileFunction(expr){
-  let e=expr.trim();
-  e=e.replace(/(\d)([a-zA-Z])/g,'$1*$2');
-  e=e.replace(/([a-zA-Z\d])\(/g,'$1*(');
-  e=e.replace(/\b(sin|cos|tan|exp|sqrt|abs|log|ln)\s*\*/g,'$1');
-  e=e.replace(/\^/g,'**');
-  e=e.replace(/\bln\b/g,'Math.log');
-  e=e.replace(/\blog\b/g,'Math.log');
-  e=e.replace(/\bsin\b/g,'Math.sin');
-  e=e.replace(/\bcos\b/g,'Math.cos');
-  e=e.replace(/\btan\b/g,'Math.tan');
-  e=e.replace(/\bexp\b/g,'Math.exp');
-  e=e.replace(/\bsqrt\b/g,'Math.sqrt');
-  e=e.replace(/\babs\b/g,'Math.abs');
-  e=e.replace(/\bpi\b/g,'Math.PI');
-  e=e.replace(/\be\b/g,'Math.E');
-  const fn=new Function('x','y',`"use strict"; return (${e});`);
-  const test=fn(1,1);
-  if(typeof test!=='number'||!isFinite(test)) throw new Error('Result is not finite at (1,1)');
-  return fn;
-}
- 
-function loadFunction(){
-  const input=document.getElementById('funcInput').value.trim();
-  const errEl=document.getElementById('funcError');
-  errEl.style.display='none';
-  if(!input){errEl.textContent='Please enter a function.';errEl.style.display='block';return false;}
-  try{
-    compiledFn=compileFunction(input);
-    currentAST=parseExpr(input);
-    currentFnStr=input;
-    document.getElementById('funcDisplayText').innerHTML=
-      `f(<span class="var">x</span>, <span class="var">y</span>) = <span style="color:var(--text)">${escHtml(input)}</span>`;
-    // Reset result area
-    document.getElementById('resultIdle').style.display='block';
-    document.getElementById('resultContent').style.display='none';
-    const rc=document.getElementById('simResult');
-    rc.className='result-card';
-    showToast('Function loaded! Ready to differentiate.','ok');
-    return true;
-  } catch(err){
-    errEl.textContent='Parse error: '+err.message;
-    errEl.style.display='block';
-    compiledFn=null; currentAST=null;
-    showToast('Invalid function — check syntax.','err');
-    return false;
-  }
-}
- 
-document.getElementById('btnLoadFunc').addEventListener('click',loadFunction);
-document.getElementById('funcInput').addEventListener('keydown',e=>{ if(e.key==='Enter') loadFunction(); });
-document.querySelectorAll('#exampleBtns [data-fn]').forEach(btn=>{
-  btn.addEventListener('click',()=>{ document.getElementById('funcInput').value=btn.getAttribute('data-fn'); loadFunction(); });
-});
- 
-function numericalDerivX(fn,x,y){ const h=1e-5; return (fn(x+h,y)-fn(x-h,y))/(2*h); }
-function numericalDerivY(fn,x,y){ const h=1e-5; return (fn(x,y+h)-fn(x,y-h))/(2*h); }
- 
-function getSimVals(){
-  let x=parseFloat(document.getElementById('simX').value);
-  let y=parseFloat(document.getElementById('simY').value);
-  if(isNaN(x)) x=0; if(isNaN(y)) y=0;
-  return{x,y};
-}
- 
-function showResult(wrtVar, symExpr, numVal, fval, x, y){
-  const isX=(wrtVar==='x');
-  const rc=document.getElementById('simResult');
-  rc.className='result-card '+(isX?'result-x':'result-y');
-  document.getElementById('resultIdle').style.display='none';
-  document.getElementById('resultContent').style.display='block';
- 
-  const varColor=isX?'var(--accent)':'var(--accent2)';
-  const constVar=isX?'y':'x';
-  const constVal=isX?y:x;
- 
-  // Symbolic panel
-  document.getElementById('symValue').innerHTML=
-    `<span style="color:${varColor}">∂f/∂${wrtVar}</span> = ${escHtml(symExpr)}`;
- 
-  // Numerical panel
-  document.getElementById('numValue').innerHTML=
-    `<span style="color:var(--accent3)">${numVal.toFixed(6)}</span>`;
-  document.getElementById('numSub').textContent=`at (x=${x}, y=${y})`;
- 
-  // Formula summary
-  document.getElementById('resultFormula').textContent=
-    `∂f/∂${wrtVar} evaluated at (x=${x}, y=${y})   |   f(x,y) = ${fval.toFixed(6)}`;
- 
-  // Steps
-  document.getElementById('resultSteps').innerHTML=
-    `<strong>How it was computed:</strong><br>`+
-    `<span class="step-badge">1</span>Treat <strong>${constVar} = ${constVal}</strong> as a constant<br>`+
-    `<span class="step-badge">2</span><span class="sym-badge">Symbolic</span> Differentiate f algebraically w.r.t. <strong>${wrtVar}</strong> → `+
-      `<span style="color:var(--accent2);font-family:'Space Mono',monospace">${escHtml(symExpr)}</span><br>`+
-    `<span class="step-badge">3</span><span class="num-badge">Numerical</span> Substitute (x=${x}, y=${y}) into the derivative → `+
-      `<span style="color:var(--accent3);font-family:'Space Mono',monospace">${numVal.toFixed(6)}</span><br>`+
-    `<span class="step-badge">4</span>Verification via central difference: `+
-      `[f(${wrtVar}+h) − f(${wrtVar}−h)] / 2h ≈ `+
-      `<span style="color:var(--accent3);font-family:'Space Mono',monospace">${numVal.toFixed(6)}</span>`;
-}
- 
-function computePartialX(){
-  if(!compiledFn||!currentAST){showToast('Load a function first.','err');return;}
-  const{x,y}=getSimVals();
-  try{
-    const derivAST=diff(currentAST,'x');
-    const symExpr=prettyPrint(derivAST);
-    const numVal=numericalDerivX(compiledFn,x,y);
-    const fval=compiledFn(x,y);
-    showResult('x',symExpr,numVal,fval,x,y);
-  } catch(e){ showToast('Evaluation error at given x,y.','err'); }
-}
- 
-function computePartialY(){
-  if(!compiledFn||!currentAST){showToast('Load a function first.','err');return;}
-  const{x,y}=getSimVals();
-  try{
-    const derivAST=diff(currentAST,'y');
-    const symExpr=prettyPrint(derivAST);
-    const numVal=numericalDerivY(compiledFn,x,y);
-    const fval=compiledFn(x,y);
-    showResult('y',symExpr,numVal,fval,x,y);
-  } catch(e){ showToast('Evaluation error at given x,y.','err'); }
-}
- 
-document.getElementById('btnPartialX').addEventListener('click',computePartialX);
-document.getElementById('btnPartialY').addEventListener('click',computePartialY);
- 
-function liveUpdate(){
-  const cls=document.getElementById('simResult').className;
-  if(cls.includes('result-x')) computePartialX();
-  else if(cls.includes('result-y')) computePartialY();
-}
-document.getElementById('simX').addEventListener('input',liveUpdate);
-document.getElementById('simY').addEventListener('input',liveUpdate);
- 
+
 // ── MCQ Scoring ──────────────────────────────────────────────
 function scoreForm(prefix){
   let score=0;
@@ -1301,7 +943,7 @@ function showScore(scoreNum,outOf,numId,titleId,subId,fillId,bannerId){
   document.getElementById(fillId).style.width=pct+'%';
   document.getElementById(bannerId).classList.add('visible');
 }
- 
+
 function submitPretest(){
   const score=scoreForm('pre');
   showScore(score,5,'pretestScoreNum','pretestScoreTitle','pretestScoreSub','pretestFill','pretest-score');
@@ -1309,7 +951,7 @@ function submitPretest(){
   document.getElementById('pretestSubmitBtn').innerHTML='<i class="fas fa-check"></i> Submitted';
   showToast(`Pretest: ${score}/5 — Good start!`,'ok');
 }
- 
+
 function submitPosttest(){
   const score=scoreForm('post');
   const name=(document.getElementById('studentName').value.trim()||'Anonymous Learner');
@@ -1317,9 +959,9 @@ function submitPosttest(){
   const timestamp=new Date().toLocaleString('en-IN',{dateStyle:'medium',timeStyle:'short'});
   const record={name,score,total:5,pct,timestamp};
   let records=[];
-  try{const e=localStorage.getItem('partialDiffResults');if(e)records=JSON.parse(e);}catch(e){}
+  try{const e=localStorage.getItem('signalsResults');if(e)records=JSON.parse(e);}catch(e){}
   records.push(record);
-  localStorage.setItem('partialDiffResults',JSON.stringify(records));
+  localStorage.setItem('signalsResults',JSON.stringify(records));
   showScore(score,5,'posttestScoreNum','posttestScoreTitle','posttestScoreSub','posttestFill','posttest-score');
   const msg=document.getElementById('saveMsg');
   msg.textContent=`✔ Record saved! ${name} scored ${score}/5 (${pct}%) on ${timestamp}`;
@@ -1330,10 +972,10 @@ function submitPosttest(){
   showToast(`${name}: ${score}/5 saved successfully!`,'ok');
 }
 document.getElementById('savePosttestBtn').addEventListener('click',submitPosttest);
- 
+
 function renderRecords(){
   let records=[];
-  try{const e=localStorage.getItem('partialDiffResults');if(e)records=JSON.parse(e);}catch(e){}
+  try{const e=localStorage.getItem('signalsResults');if(e)records=JSON.parse(e);}catch(e){}
   if(!records.length){document.getElementById('savedSection').style.display='none';return;}
   document.getElementById('savedSection').style.display='block';
   const tbody=document.getElementById('recordsBody');
@@ -1348,9 +990,9 @@ function renderRecords(){
     tbody.appendChild(tr);
   });
 }
- 
+
 function escHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
- 
+
 // ── Feedback ──
 let selectedRating=0;
 const ratingLabels=['','😕 Poor','😐 Fair','🙂 Good','😊 Great','🤩 Excellent!'];
@@ -1372,14 +1014,468 @@ function submitFeedback(){
   document.getElementById('feedComment').value='';
   setTimeout(goBack,1200);
 }
- 
+
+// ══════════════════════════════════════════════════════════════
+// SIGNAL PROCESSING ENGINE
+// ══════════════════════════════════════════════════════════════
+
+// Register zoom plugin globally
+Chart.register(ChartZoom);
+
+const zoomOptions = {
+  pan: { enabled: true, mode: 'xy', modifierKey: null },
+  zoom: {
+    wheel: { enabled: true, speed: 0.1 },
+    pinch: { enabled: true },
+    drag: { enabled: false },
+    mode: 'xy',
+  }
+};
+
+function chartOptions(title, xLabel, yLabel) {
+  return {
+    responsive: true,
+    maintainAspectRatio: false,
+    animation: false,
+    scales: {
+      x: {
+        type: 'linear',
+        title: { display: true, text: xLabel, color: '#64748b', font: { family: 'Sora', size: 12, weight: '600' } },
+        grid: { color: 'rgba(37,99,235,0.06)' },
+        ticks: { color: '#64748b', font: { family: 'Space Mono', size: 10 } }
+      },
+      y: {
+        title: { display: true, text: yLabel, color: '#64748b', font: { family: 'Sora', size: 12, weight: '600' } },
+        grid: { color: 'rgba(37,99,235,0.06)' },
+        ticks: { color: '#64748b', font: { family: 'Space Mono', size: 10 } }
+      }
+    },
+    plugins: {
+      tooltip: {
+        backgroundColor: 'rgba(15,23,42,0.95)',
+        titleFont: { family: 'Space Mono', size: 12 },
+        bodyFont: { family: 'Space Mono', size: 12 },
+        padding: 10,
+        cornerRadius: 8,
+        callbacks: {
+          label: (ctx) => `t=${ctx.parsed.x.toFixed(3)}, y=${ctx.parsed.y.toFixed(4)}`
+        }
+      },
+      legend: { display: true, position: 'top', labels: { color: '#1e293b', font: { family: 'Sora', size: 12, weight: '600' }, usePointStyle: true, padding: 14 } },
+      zoom: zoomOptions,
+      title: title ? { display: true, text: title, color: '#0f172a', font: { family: 'Sora', size: 14, weight: '700' } } : { display: false }
+    }
+  };
+}
+
+let genChart, opChart;
+let currentOp = 'amplitude';
+
+// ── Helpers ──
+function linspace(start, end, steps) {
+  const arr = [];
+  const step = (end - start) / (steps - 1);
+  for (let i = 0; i < steps; i++) arr.push(start + i * step);
+  return arr;
+}
+function discretePoints(start, end) {
+  const t = [];
+  const s = Math.ceil(start);
+  const e = Math.floor(end);
+  for (let i = s; i <= e; i++) t.push(i);
+  return t;
+}
+function evalSignal(type, tArr, amp, freq, shift) {
+  return tArr.map(t => {
+    const arg = t - shift;
+    switch (type) {
+      case 'sinusoidal': return amp * Math.sin(2 * Math.PI * freq * arg);
+      case 'exponential': return amp * Math.exp(-freq * arg);
+      case 'ramp': return amp * arg;
+      case 'unitstep': return arg >= 0 ? amp : 0;
+      case 'unitimpulse': return Math.abs(arg) < 1e-9 ? amp : 0;
+      default: return 0;
+    }
+  });
+}
+function getGenMode() {
+  return document.querySelector('input[name="genMode"]:checked').value;
+}
+function getOpMode() {
+  return document.querySelector('input[name="opMode"]:checked').value;
+}
+
+// ── Generator Plot ──
+function plotGenerator() {
+  const mode = getGenMode();
+  const type = document.getElementById('genSignalType').value;
+  const amp = parseFloat(document.getElementById('genAmp').value) || 1;
+  const freq = parseFloat(document.getElementById('genFreq').value) || 1;
+  const shift = parseFloat(document.getElementById('genShift').value) || 0;
+  const tStart = parseFloat(document.getElementById('genTstart').value) || -2;
+  const tEnd = parseFloat(document.getElementById('genTend').value) || 2;
+
+  let tPoints, signal;
+  if (mode === 'continuous') {
+    tPoints = linspace(tStart, tEnd, 800);
+    signal = evalSignal(type, tPoints, amp, freq, shift);
+  } else {
+    tPoints = discretePoints(tStart, tEnd);
+    signal = evalSignal(type, tPoints, amp, freq, shift);
+  }
+
+  const datasets = [];
+  if (mode === 'continuous') {
+    datasets.push({
+      label: `${type} (continuous)`,
+      data: tPoints.map((t, i) => ({ x: t, y: signal[i] })),
+      borderColor: '#2563eb',
+      backgroundColor: 'rgba(37,99,235,0.05)',
+      borderWidth: 2.5,
+      pointRadius: 0,
+      tension: 0.2,
+      fill: true,
+    });
+  } else {
+    datasets.push({
+      label: `${type} (discrete)`,
+      data: tPoints.map((t, i) => ({ x: t, y: signal[i] })),
+      borderColor: '#2563eb',
+      backgroundColor: '#2563eb',
+      borderWidth: 2,
+      pointRadius: 5,
+      pointBackgroundColor: '#2563eb',
+      pointBorderColor: '#ffffff',
+      pointBorderWidth: 1.5,
+      showLine: true,
+      tension: 0,
+      fill: false,
+    });
+  }
+
+  if (genChart) genChart.destroy();
+  const ctx = document.getElementById('genChart').getContext('2d');
+  genChart = new Chart(ctx, {
+    type: 'line',
+    data: { datasets },
+    options: chartOptions(null, 'Time (t)', 'Amplitude')
+  });
+
+  document.getElementById('genInfo').innerText = 
+    mode === 'continuous' ? `Continuous · ${type} · A=${amp}, f=${freq}, shift=${shift}` 
+                          : `Discrete · ${type} · A=${amp}, f=${freq}, shift=${shift} · samples: ${tPoints.length}`;
+}
+
+// ── Operation Extra UI ──
+function updateOpExtraUI() {
+  const container = document.getElementById('opExtraParams');
+  const op = currentOp;
+  if (!op) return;
+  let html = '';
+  if (op === 'amplitude' || op === 'timescale' || op === 'timedelay' || op === 'timeadvance') {
+    let label = op === 'amplitude' ? 'Scale factor (k)' :
+                op === 'timescale' ? 'Time scale (a)' :
+                op === 'timedelay' ? 'Delay t₀ (t - t₀)' : 'Advance t₀ (t + t₀)';
+    let def = op === 'amplitude' ? '2' : op === 'timescale' ? '2' : '1';
+    html = `<div class="inp-group" style="flex:0 0 auto;min-width:180px;">
+              <label>${label}</label>
+              <input type="number" id="opExtraParam1" value="${def}" step="0.1" style="width:100%;padding:10px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:12px;color:var(--text);font-size:14px;font-family:'Space Mono',monospace;">
+            </div>`;
+  } else if (op === 'addition' || op === 'subtraction' || op === 'multiplication') {
+    html = `<div class="inp-group" style="flex:1;min-width:150px;">
+              <label>Second signal type</label>
+              <select id="opExtraSignalType" style="width:100%;padding:10px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:12px;color:var(--text);font-size:14px;font-family:'Sora',sans-serif;">
+                <option value="sinusoidal">Sinusoidal</option>
+                <option value="exponential">Exponential</option>
+                <option value="ramp">Ramp</option>
+                <option value="unitstep">Unit Step</option>
+              </select>
+            </div>
+            <div class="inp-group" style="flex:0 0 auto;min-width:100px;">
+              <label>Second amp</label>
+              <input type="number" id="opExtraAmp" value="1" step="0.1" style="width:100%;padding:10px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:12px;color:var(--text);font-size:14px;font-family:'Space Mono',monospace;">
+            </div>
+            <div class="inp-group" style="flex:0 0 auto;min-width:100px;">
+              <label>Second freq</label>
+              <input type="number" id="opExtraFreq" value="1" step="0.1" style="width:100%;padding:10px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:12px;color:var(--text);font-size:14px;font-family:'Space Mono',monospace;">
+            </div>
+            <div class="inp-group" style="flex:0 0 auto;min-width:100px;">
+              <label>Second shift</label>
+              <input type="number" id="opExtraShift" value="0" step="0.1" style="width:100%;padding:10px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:12px;color:var(--text);font-size:14px;font-family:'Space Mono',monospace;">
+            </div>`;
+  } else if (op === 'timereversal') {
+    html = `<div><span class="status-badge">x(-t) — no extra parameters</span></div>`;
+  }
+  container.innerHTML = html;
+}
+
+function setActiveOpButton(op) {
+  document.querySelectorAll('.op-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.op === op);
+  });
+}
+
+// ── Apply Operation ──
+function applyOperation() {
+  const mode = getOpMode();
+  const baseType = document.getElementById('opBaseSignal').value;
+  const baseAmp = parseFloat(document.getElementById('opAmp').value) || 1;
+  const baseFreq = parseFloat(document.getElementById('opFreq').value) || 1;
+  const baseShift = parseFloat(document.getElementById('opShift').value) || 0;
+
+  const tStart = -3, tEnd = 3;
+  let tPoints, baseSignal, resultSignal;
+  const op = currentOp;
+
+  if (mode === 'continuous') {
+    tPoints = linspace(tStart, tEnd, 800);
+    baseSignal = evalSignal(baseType, tPoints, baseAmp, baseFreq, baseShift);
+  } else {
+    tPoints = discretePoints(tStart, tEnd);
+    baseSignal = evalSignal(baseType, tPoints, baseAmp, baseFreq, baseShift);
+  }
+
+  try {
+    if (op === 'amplitude') {
+      const k = parseFloat(document.getElementById('opExtraParam1')?.value);
+      if (isNaN(k)) throw 'Enter scale factor';
+      resultSignal = baseSignal.map(v => k * v);
+    } 
+    else if (op === 'addition') {
+      const secType = document.getElementById('opExtraSignalType')?.value || 'sinusoidal';
+      const secAmp = parseFloat(document.getElementById('opExtraAmp')?.value) || 1;
+      const secFreq = parseFloat(document.getElementById('opExtraFreq')?.value) || 1;
+      const secShift = parseFloat(document.getElementById('opExtraShift')?.value) || 0;
+      const secondSignal = evalSignal(secType, tPoints, secAmp, secFreq, secShift);
+      resultSignal = baseSignal.map((v, i) => v + secondSignal[i]);
+    } 
+    else if (op === 'subtraction') {
+      const secType = document.getElementById('opExtraSignalType')?.value || 'sinusoidal';
+      const secAmp = parseFloat(document.getElementById('opExtraAmp')?.value) || 1;
+      const secFreq = parseFloat(document.getElementById('opExtraFreq')?.value) || 1;
+      const secShift = parseFloat(document.getElementById('opExtraShift')?.value) || 0;
+      const secondSignal = evalSignal(secType, tPoints, secAmp, secFreq, secShift);
+      resultSignal = baseSignal.map((v, i) => v - secondSignal[i]);
+    } 
+    else if (op === 'multiplication') {
+      const secType = document.getElementById('opExtraSignalType')?.value || 'sinusoidal';
+      const secAmp = parseFloat(document.getElementById('opExtraAmp')?.value) || 1;
+      const secFreq = parseFloat(document.getElementById('opExtraFreq')?.value) || 1;
+      const secShift = parseFloat(document.getElementById('opExtraShift')?.value) || 0;
+      const secondSignal = evalSignal(secType, tPoints, secAmp, secFreq, secShift);
+      resultSignal = baseSignal.map((v, i) => v * secondSignal[i]);
+    } 
+    else if (op === 'timescale') {
+      const a = parseFloat(document.getElementById('opExtraParam1')?.value);
+      if (isNaN(a) || a === 0) throw 'Scale factor a ≠ 0';
+      resultSignal = tPoints.map(t => {
+        const newT = a * t;
+        const arg = newT - baseShift;
+        let val;
+        switch (baseType) {
+          case 'sinusoidal': val = baseAmp * Math.sin(2 * Math.PI * baseFreq * arg); break;
+          case 'exponential': val = baseAmp * Math.exp(-baseFreq * arg); break;
+          case 'ramp': val = baseAmp * arg; break;
+          case 'unitstep': val = arg >= 0 ? baseAmp : 0; break;
+          default: val = 0;
+        }
+        return val;
+      });
+    } 
+    else if (op === 'timereversal') {
+      resultSignal = tPoints.map(t => {
+        const arg = (-t) - baseShift;
+        let val;
+        switch (baseType) {
+          case 'sinusoidal': val = baseAmp * Math.sin(2 * Math.PI * baseFreq * arg); break;
+          case 'exponential': val = baseAmp * Math.exp(-baseFreq * arg); break;
+          case 'ramp': val = baseAmp * arg; break;
+          case 'unitstep': val = arg >= 0 ? baseAmp : 0; break;
+          default: val = 0;
+        }
+        return val;
+      });
+    } 
+    else if (op === 'timedelay') {
+      const t0 = parseFloat(document.getElementById('opExtraParam1')?.value);
+      if (isNaN(t0)) throw 'Enter delay t₀';
+      resultSignal = tPoints.map(t => {
+        const arg = (t - t0) - baseShift;
+        let val;
+        switch (baseType) {
+          case 'sinusoidal': val = baseAmp * Math.sin(2 * Math.PI * baseFreq * arg); break;
+          case 'exponential': val = baseAmp * Math.exp(-baseFreq * arg); break;
+          case 'ramp': val = baseAmp * arg; break;
+          case 'unitstep': val = arg >= 0 ? baseAmp : 0; break;
+          default: val = 0;
+        }
+        return val;
+      });
+    } 
+    else if (op === 'timeadvance') {
+      const t0 = parseFloat(document.getElementById('opExtraParam1')?.value);
+      if (isNaN(t0)) throw 'Enter advance t₀';
+      resultSignal = tPoints.map(t => {
+        const arg = (t + t0) - baseShift;
+        let val;
+        switch (baseType) {
+          case 'sinusoidal': val = baseAmp * Math.sin(2 * Math.PI * baseFreq * arg); break;
+          case 'exponential': val = baseAmp * Math.exp(-baseFreq * arg); break;
+          case 'ramp': val = baseAmp * arg; break;
+          case 'unitstep': val = arg >= 0 ? baseAmp : 0; break;
+          default: val = 0;
+        }
+        return val;
+      });
+    } else {
+      resultSignal = baseSignal;
+    }
+  } catch (e) {
+    alert(e);
+    return;
+  }
+
+  if (opChart) opChart.destroy();
+  const ctx = document.getElementById('opChart').getContext('2d');
+  const datasets = [];
+  if (mode === 'continuous') {
+    datasets.push({
+      label: 'Base signal',
+      data: tPoints.map((t, i) => ({ x: t, y: baseSignal[i] })),
+      borderColor: '#94a3b8',
+      borderWidth: 2,
+      pointRadius: 0,
+      tension: 0.1,
+      borderDash: [6, 4],
+      fill: false,
+    });
+    datasets.push({
+      label: `Result: ${op}`,
+      data: tPoints.map((t, i) => ({ x: t, y: resultSignal[i] })),
+      borderColor: '#2563eb',
+      backgroundColor: 'rgba(37,99,235,0.05)',
+      borderWidth: 2.5,
+      pointRadius: 0,
+      tension: 0.1,
+      fill: true,
+    });
+  } else {
+    datasets.push({
+      label: 'Base signal (discrete)',
+      data: tPoints.map((t, i) => ({ x: t, y: baseSignal[i] })),
+      borderColor: '#94a3b8',
+      backgroundColor: '#94a3b8',
+      borderWidth: 2,
+      pointRadius: 4,
+      showLine: true,
+      tension: 0,
+      borderDash: [6, 4],
+    });
+    datasets.push({
+      label: `Result: ${op} (discrete)`,
+      data: tPoints.map((t, i) => ({ x: t, y: resultSignal[i] })),
+      borderColor: '#2563eb',
+      backgroundColor: '#2563eb',
+      borderWidth: 2,
+      pointRadius: 6,
+      pointBackgroundColor: '#2563eb',
+      pointBorderColor: '#fff',
+      pointBorderWidth: 1.5,
+      showLine: true,
+      tension: 0,
+    });
+  }
+
+  opChart = new Chart(ctx, {
+    type: 'line',
+    data: { datasets },
+    options: chartOptions(null, 'Time (t)', 'Amplitude')
+  });
+
+  document.getElementById('opInfo').innerText = `Operation: ${op} · base: ${baseType} · mode: ${mode}`;
+}
+
+// ── Reset Base Plot ──
+function resetBasePlot() {
+  const mode = getOpMode();
+  const baseType = document.getElementById('opBaseSignal').value;
+  const baseAmp = parseFloat(document.getElementById('opAmp').value) || 1;
+  const baseFreq = parseFloat(document.getElementById('opFreq').value) || 1;
+  const baseShift = parseFloat(document.getElementById('opShift').value) || 0;
+  let tPoints, baseSignal;
+  if (mode === 'continuous') {
+    tPoints = linspace(-3, 3, 800);
+    baseSignal = evalSignal(baseType, tPoints, baseAmp, baseFreq, baseShift);
+  } else {
+    tPoints = discretePoints(-3, 3);
+    baseSignal = evalSignal(baseType, tPoints, baseAmp, baseFreq, baseShift);
+  }
+  if (opChart) opChart.destroy();
+  const ctx = document.getElementById('opChart').getContext('2d');
+  const datasets = [];
+  if (mode === 'continuous') {
+    datasets.push({ 
+      label: 'Base signal', 
+      data: tPoints.map((t,i)=>({x:t, y:baseSignal[i]})), 
+      borderColor: '#2563eb', 
+      backgroundColor: 'rgba(37,99,235,0.05)',
+      borderWidth: 2.5, 
+      pointRadius:0, 
+      tension:0.2,
+      fill:true
+    });
+  } else {
+    datasets.push({ 
+      label: 'Base signal (discrete)', 
+      data: tPoints.map((t,i)=>({x:t, y:baseSignal[i]})), 
+      borderColor: '#2563eb', 
+      backgroundColor:'#2563eb', 
+      borderWidth:2, 
+      pointRadius:6, 
+      pointBackgroundColor: '#2563eb',
+      pointBorderColor: '#fff',
+      pointBorderWidth: 1.5,
+      showLine:true, 
+      tension:0 
+    });
+  }
+  opChart = new Chart(ctx, { 
+    type:'line', 
+    data:{datasets}, 
+    options: chartOptions(null, 'Time (t)', 'Amplitude')
+  });
+  document.getElementById('opInfo').innerText = 'Base signal plotted.';
+}
+
 // ── Init ──
-window.addEventListener('load',()=>{
-  // Pre-load default function
-  try{
-    compiledFn=compileFunction(currentFnStr);
-    currentAST=parseExpr(currentFnStr);
-  } catch(e){}
+window.addEventListener('load', () => {
+  // Generator initial plot
+  plotGenerator();
+
+  // Op button listeners
+  document.querySelectorAll('.op-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      currentOp = e.target.dataset.op;
+      setActiveOpButton(currentOp);
+      updateOpExtraUI();
+    });
+  });
+  setActiveOpButton('amplitude');
+  updateOpExtraUI();
+
+  // Buttons
+  document.getElementById('generateBtn').addEventListener('click', plotGenerator);
+  document.getElementById('applyOpBtn').addEventListener('click', applyOperation);
+  document.getElementById('resetOpBtn').addEventListener('click', resetBasePlot);
+
+  // Auto-replot on mode change
+  document.querySelectorAll('input[name="genMode"]').forEach(r => r.addEventListener('change', plotGenerator));
+  document.getElementById('genSignalType').addEventListener('change', plotGenerator);
+
+  // Initialize op base plot
+  resetBasePlot();
+
+  // Records
   renderRecords();
 });
 </script>
